@@ -140,9 +140,6 @@
     padding:8px 24px; margin-top:12px; transition:all .18s; }
   .btn-lucky:hover{ background:rgba(201,162,75,.22); color:#ffe9bd; box-shadow:0 0 16px rgba(201,162,75,.25); }
 
-  .yujian{ margin-top:18px; font-size:14px; color:#e8dcc0; background:rgba(150,60,40,.14);
-    border:1px dashed rgba(235,170,120,.45); border-radius:8px; padding:10px 14px; line-height:1.9; }
-  .yujian b{ color:#ffb98f; font-weight:normal; }
   .disclaimer{ margin-top:14px; font-size:12px; color:#9c8b68; line-height:1.9; text-align:center;
     border-top:1px dashed rgba(201,162,75,.4); padding-top:12px; }
 
@@ -155,14 +152,22 @@
     .plaque-top{ letter-spacing:4px; font-size:12px; }
   }
 
-  /* ================= 联系馆主 · 四馆结果结缘 ================= */
-  .contact-bar{ margin-top:4px; text-align:center; }
-  .btn-contact{ margin-top:6px; border-color:#c9a24b;
-    background:linear-gradient(180deg,rgba(201,162,75,.24),rgba(201,162,75,.06)); }
-  .btn-contact:not(:disabled):hover{ background:linear-gradient(180deg,rgba(201,162,75,.4),rgba(201,162,75,.16)); }
-  .btn-contact:disabled{ opacity:.45; cursor:not-allowed; filter:grayscale(.35); }
-  .contact-state{ display:block; margin-top:8px; font-size:12.5px; letter-spacing:1px;
-    color:#b8a26f; line-height:1.8; }
+  /* ================= 悬浮结缘 · 联系馆主（固定右下，仿心理学馆「问心」钮） ================= */
+  .fab-x{ position:fixed; right:20px; bottom:22px; z-index:60; cursor:pointer;
+    font-family:inherit; text-align:center; line-height:1.7;
+    border:1px solid rgba(240,190,120,.9); border-radius:999px; padding:9px 22px 8px;
+    color:#fff6e0; letter-spacing:5px; text-indent:5px; font-weight:bold;
+    background:linear-gradient(180deg,#b9533f 0%,#8c2418 60%,#6e160e 100%);
+    box-shadow:0 12px 28px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,224,150,.4),
+      0 0 20px rgba(230,150,90,.2);
+    animation:fabGlow 2.6s ease-in-out infinite; transition:transform .18s, filter .18s; }
+  @keyframes fabGlow{ 0%,100%{ box-shadow:0 12px 26px rgba(0,0,0,.5), 0 0 14px rgba(230,150,90,.16);}
+    50%{ box-shadow:0 14px 34px rgba(0,0,0,.62), 0 0 30px rgba(230,150,90,.42);} }
+  .fab-x:hover{ transform:translateY(-2px); filter:brightness(1.07); }
+  .fab-x small{ display:block; font-size:9.5px; letter-spacing:1px; color:#ffd9a0;
+    font-weight:normal; margin-top:1px; white-space:nowrap; }
+  .co-wx{ margin-top:2px; text-align:center; font-size:13px; letter-spacing:1px; color:#e8d29a; }
+  .co-wx b{ color:#ffb98f; letter-spacing:1px; }
   .co-ov{ position:fixed; inset:0; z-index:70; display:none; align-items:flex-start;
     justify-content:center; overflow:auto; padding:26px 12px; background:rgba(6,4,1,.76); }
   .co-box{ position:relative; width:100%; max-width:660px; margin:0 auto;
@@ -187,6 +192,16 @@
   .co-row .no{ color:#e0a98d; font-size:13px; }
   .co-fld{ margin-top:14px; }
   .co-fld label{ display:block; font-size:13px; color:#cfbe92; letter-spacing:1px; margin-bottom:6px; }
+  .co-fld .req{ color:#ff9d7a; font-style:normal; font-size:11.5px; }
+  .co-fld .opt{ color:#8f7c54; font-size:11px; font-style:normal; }
+  .co-fld .lab-hint{ color:#8f7c54; font-size:11px; margin-left:10px; }
+  .co-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:4px 14px; margin-top:12px; }
+  .co-cell .co-input{ margin-top:2px; }
+  .co-cell.co-span2{ grid-column:1 / -1; }
+  .co-hint{ margin-top:10px; text-align:center; font-size:12.5px; letter-spacing:1px;
+    color:#e8d29a; line-height:1.9; }
+  .co-hint b{ color:#ffb98f; font-weight:normal; }
+  .co-hint.ok b{ color:#bcd893; }
   .co-input{ width:100%; font-family:inherit; font-size:15px; letter-spacing:1px; padding:10px 12px;
     border-radius:8px; background:rgba(8,5,2,.55); color:#f2e5c4;
     border:1px solid rgba(201,162,75,.5); outline:none; }
@@ -209,7 +224,11 @@
     .co-box{ padding:18px 14px 16px; }
     .co-ta{ min-height:130px; }
     .co-btn{ padding:8px 13px; font-size:12.5px; letter-spacing:1px; }
+    .co-grid{ grid-template-columns:1fr; gap:6px 0; }
+    .fab-x{ right:12px; bottom:16px; padding:8px 17px 7px; letter-spacing:3px; text-indent:3px; }
+    .fab-x small{ font-size:9px; }
   }
+
 </style>
 </head>
 <body>
@@ -309,20 +328,16 @@
     <span class="pm-hint">不测命理 · 只管安心</span>
   </div>
 
-  <div class="contact-bar">
-    <button class="btn-lucky btn-contact" type="button" id="btnContact" onclick="xzOpenContact()">联 系 馆 主</button>
-    <span class="contact-state" id="contactState"></span>
-  </div>
+  <!-- 悬浮结缘 · 联系馆主：固定右下，随时可点（仿心理学馆「问心」悬浮钮） -->
+  <button class="fab-x" type="button" id="btnContact" onclick="xzOpenContact()">结 缘<small id="contactState">先测一门，再把结果递馆主细聊</small></button>
 
   <div class="motto">命盘是一张地图，卦象是一面当下的镜子——
     知命而不认命，问卦而不迷卦。路，始终在自己脚下。</div>
 
-  <div class="yujian"><b>结缘留灯：</b>命盘想细问流年应期、事业姻缘，或卦象想问何月见机、如何化解——可加微信 <b>luyu11888</b> 详聊，备注「深情猫玄学馆」即可。</div>
-
   <div class="disclaimer">
     命是弱者的借口，运是强者的谦辞；卦是镜子，不是签筒。<br>
     本馆用于传统文化学习与娱乐参考，不构成任何决策、医疗、投资或法律建议。<br>
-    排盘历法由开源库 lunar.js（6tail，MIT）计算；白话文字均为本馆依传统文化常识自行撰写。字字皆参考，句句别当真。
+    排盘历法由开源库 lunar.js（6tail，MIT）计算；白话文字均为本馆依传统文化常识自行撰写。    字字皆参考，句句别当真。
   </div>
 </div>
 
@@ -331,13 +346,37 @@
   <div class="co-box">
     <button class="co-x" type="button" id="coClose" title="合上">✕</button>
     <div class="co-title">联 系 馆 主 · 结 缘 递 结 果</div>
-    <div class="co-sub">测完的馆，结果已替你收在同一处。留个手机号，把<b>四馆结果＋手机号</b>一并带给馆主——馆主细看后会按你留的方式回你。也可复制全文，或用邮箱发送。</div>
+    <div class="co-sub">测完的馆，结果已替你收在同一处。留个<b>手机号（必填）</b>，把<b>四馆结果＋手机号</b>一并带给馆主——馆主细看后会回电陪你细聊。其余信息随你方便选填，好让馆主按你喜欢的联络方式回你。</div>
+    <div class="co-wx">想直接聊：微信 <b>luyu11888</b> · 备注「深情猫玄学馆」</div>
     <div class="co-list" id="coList"></div>
-    <div class="co-fld">
-      <label for="coPhone">测试者手机号（可留可不留 · 留了馆主才好回电细聊）</label>
+    <div class="co-fld" id="coFld">
+      <label for="coPhone">测试者手机号 <span class="req">＊ 必填</span><span class="lab-hint">馆主回电细聊 · 仅馆主可见</span></label>
       <input class="co-input" id="coPhone" type="tel" inputmode="numeric" maxlength="11" placeholder="11 位手机号，例如 13800138000">
+      <div class="co-grid">
+        <div class="co-cell">
+          <label for="coSurname">姓氏 / 称呼 <span class="opt">选填</span></label>
+          <input class="co-input" id="coSurname" maxlength="12" placeholder="例：陈">
+        </div>
+        <div class="co-cell">
+          <label for="coRegion">所在城市 <span class="opt">选填</span></label>
+          <input class="co-input" id="coRegion" maxlength="20" placeholder="例：深圳">
+        </div>
+        <div class="co-cell">
+          <label for="coWx">微信号 <span class="opt">选填</span></label>
+          <input class="co-input" id="coWx" maxlength="30" placeholder="例：luyu11888">
+        </div>
+        <div class="co-cell">
+          <label for="coQq">QQ 号 <span class="opt">选填</span></label>
+          <input class="co-input" id="coQq" inputmode="numeric" maxlength="13" placeholder="例：12345678">
+        </div>
+        <div class="co-cell co-span2">
+          <label for="coXid">X / 推特账号 <span class="opt">选填</span></label>
+          <input class="co-input" id="coXid" maxlength="30" placeholder="例：@luyu11888">
+        </div>
+      </div>
     </div>
     <textarea class="co-ta" id="coText" readonly spellcheck="false"></textarea>
+    <div class="co-hint" id="coHint"></div>
     <div class="co-btns">
       <button class="co-btn co-primary" type="button" id="coSubmit">留 号 递 结 果 · 馆 主 回 电 细 聊</button>
       <button class="co-btn" type="button" id="coCopy">复 制 结 果 ＋ 手 机 号</button>
@@ -391,10 +430,45 @@ function xzPhoneVal() {
   var el = xz$('coPhone');
   return el ? el.value.replace(/\D/g, '') : '';
 }
+function xzPhoneOk() { /* 手机号必填 · 1 开头 11 位 */
+  return /^1\d{10}$/.test(xzPhoneVal());
+}
+function xzInfo() { /* 选填信息：姓氏 / 城市 / 微信 / QQ / X */
+  var g = function (id) {
+    var el = xz$(id);
+    return el ? el.value.replace(/^\s+|\s+$/g, '') : '';
+  };
+  return {
+    surname: g('coSurname'),
+    region: g('coRegion'),
+    wechat: g('coWx'),
+    qq: g('coQq'),
+    xid: g('coXid')
+  };
+}
+function xzGate() { /* 递交 / 复制 / 邮箱 的公共闸门 */
+  var all = xzRead(), done = xzDoneCount(all);
+  if (!done) {
+    xzNote('<div style="text-align:center;background:#fbeae4;border:1px solid #dfb09c;border-radius:10px;padding:10px;font-size:13px;color:#a0392a;">请先回任一馆测过（八字 / 起卦 / 数字 / 塔罗），再来把结果递给馆主。</div>');
+    return false;
+  }
+  if (!xzPhoneOk()) {
+    xzNote('<div style="text-align:center;background:#fbeae4;border:1px solid #dfb09c;border-radius:10px;padding:10px;font-size:13px;color:#a0392a;">手机号必填：请留 11 位手机号（1 开头），馆主才好回电陪你细聊。</div>');
+    return false;
+  }
+  return true;
+}
 function xzCompose(all, phone) {
   var L = [];
   L.push('【深情猫玄学馆 · 四馆测试结果 · 联系馆主】');
-  L.push('测试者手机号：' + (phone || '（未留 · 请馆主以邮件回复本份结果即可）'));
+  L.push('测试者手机号：' + (phone || '（未留）'));
+  var info = xzInfo();
+  if (info.surname || info.region) {
+    L.push('称呼 / 城市：' + (info.surname || '—') + ' · ' + (info.region || '—'));
+  }
+  if (info.wechat) L.push('微信号：' + info.wechat);
+  if (info.qq) L.push('QQ 号：' + info.qq);
+  if (info.xid) L.push('X / 推特：' + info.xid);
   var doneIds = [], i, rec;
   for (i = 0; i < XZ_HALLS.length; i++) {
     rec = all[XZ_HALLS[i][0]];
@@ -464,14 +538,27 @@ function xzRenderList() {
   box.innerHTML = h;
 }
 function xzRefreshText() {
-  var el = xz$('coText');
+  var el = xz$('coText'), hint = xz$('coHint');
   if (!el) return;
   var all = xzRead();
   el.value = xzCompose(all, xzPhoneVal());
-  var dis = xzDoneCount(all) === 0, i, names = ['coSubmit', 'coCopy', 'coMail'];
+  var done = xzDoneCount(all) > 0, phOk = xzPhoneOk();
+  var dis = !(done && phOk), i, names = ['coSubmit', 'coCopy', 'coMail'];
   for (i = 0; i < names.length; i++) {
     var b = xz$(names[i]);
     if (b) b.disabled = dis;
+  }
+  if (hint) {
+    if (done && phOk) {
+      hint.className = 'co-hint ok';
+      hint.innerHTML = '<b>✓ 手机号已留 · 结果可递交</b>　馆主按你留的方式回你';
+    } else {
+      hint.className = 'co-hint';
+      var miss = [];
+      if (!done) miss.push('测完至少一门');
+      if (!phOk) miss.push('留 11 位手机号（必填）');
+      hint.innerHTML = '还差：' + miss.join(' ／ ') + '，齐了下方按钮即亮';
+    }
   }
 }
 function xzOpenContact() {
@@ -487,8 +574,8 @@ function xzCloseContact() {
   xzNote('');
 }
 function xzMail() {
+  if (!xzGate()) return;
   var all = xzRead(), done = xzDoneCount(all);
-  if (!done) return;
   var body = xzCompose(all, xzPhoneVal());
   var u = 'mailto:' + encodeURIComponent(XZ_CFG.email) +
     '?subject=' + encodeURIComponent(XZ_CFG.subject + ' · 已测 ' + done + ' 门') +
@@ -497,13 +584,10 @@ function xzMail() {
   window.location.href = u;
 }
 function xzSubmit() {
+  if (!xzGate()) return;   /* 必填：测过至少一门 ＋ 11 位手机号 */
   var all = xzRead(), done = xzDoneCount(all);
-  if (!done) return;
   var phone = xzPhoneVal();
-  if (phone && !/^1\d{10}$/.test(phone)) {
-    xzNote('<div style="text-align:center;background:#fbeae4;border:1px solid #dfb09c;border-radius:10px;padding:10px;font-size:13px;color:#a0392a;">手机号格式不对，请核对（1 开头 11 位）。</div>');
-    return;
-  }
+  var info = xzInfo();
   var btn = xz$('coSubmit');
   if (!btn || btn.disabled) return;
   btn.disabled = true;
@@ -530,10 +614,14 @@ function xzSubmit() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({
-        _subject: XZ_CFG.subject + ' · 已测 ' + done + ' 门' + (phone ? ' · 手机尾号 ' + phone.slice(-4) : ''),
+        _subject: XZ_CFG.subject + ' · 已测 ' + done + ' 门 · 手机尾号 ' + phone.slice(-4),
         _captcha: 'false',
-        name: '深情猫玄学馆 · 访客',
+        name: info.surname || '深情猫玄学馆 · 访客',
         phone: phone,
+        region: info.region || '',
+        wechat: info.wechat || '',
+        qq: info.qq || '',
+        xid: info.xid || '',
         halls: halls.join('、'),
         report: xzCompose(all, phone)
       })
@@ -544,14 +632,14 @@ function xzRefreshState() {
   var all = xzRead(), done = xzDoneCount(all);
   var btn = xz$('btnContact'), st = xz$('contactState');
   if (btn) {
-    btn.disabled = done === 0;
-    btn.textContent = done === 0 ? '联 系 馆 主' : '联 系 馆 主 · 已测 ' + done + ' 门';
-    btn.title = done === 0 ? '先测完至少一门，方可把结果带给馆主' : '把已测的结果＋手机号一并带给馆主';
+    btn.title = done === 0
+      ? '结缘 · 命盘卦象想细问、或把测好的结果带给馆主，点此开口'
+      : '把已测的 ' + done + ' 馆结果＋手机号一并带给馆主';
   }
   if (st) {
     st.textContent = done === 0
-      ? '测完至少一门（八字 / 起卦 / 数字 / 塔罗），此钮即亮——四馆结果与手机号可一并带给馆主细聊'
-      : '已测 ' + done + ' 门：结果＋手机号会一并送到馆主那里，馆主细看后按你留的方式回你。';
+      ? '先测一门 · 结果可递馆主细聊'
+      : '已测 ' + done + ' 门 · 递馆主细聊';
   }
 }
 function xzBind() {
@@ -560,12 +648,12 @@ function xzBind() {
   if (c) c.addEventListener('click', xzCloseContact);
   if (ov) ov.addEventListener('click', function (e) { if (e.target === ov) xzCloseContact(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') xzCloseContact(); });
-  var ph = xz$('coPhone');
-  if (ph) ph.addEventListener('input', xzRefreshText);
+  var fld = xz$('coFld');
+  if (fld) fld.addEventListener('input', xzRefreshText);   /* 手机号＋选填任一动即刷新 */
   var cp = xz$('coCopy');
   if (cp) cp.addEventListener('click', function () {
-    if (!xz$('coText') || xzDoneCount(xzRead()) === 0) return;
-    xzCopyText(xz$('coText').value, '结果＋手机号已复制，去邮箱粘贴发送即可。');
+    if (!xz$('coText') || !xzGate()) return;
+    xzCopyText(xz$('coText').value, '结果＋联系方式已复制，去邮箱粘贴发送即可。');
   });
   var ml = xz$('coMail');
   if (ml) ml.addEventListener('click', xzMail);
@@ -590,5 +678,6 @@ if (document.readyState === 'loading') {
   p.rel = 'noopener';
 })();
 </script>
+<script src="xz-music.js"></script>
 </body>
 </html>
