@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深情猫玄学馆 · 命理 · 占卜 · 数字能量 · 塔罗</title>
+<style>
+  :root{ --gold:#c9a24b; --red:#b9683f; --blue:#6fa3b8; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    font-family:"KaiTi","STKaiti","楷体","SimSun",serif; color:#e9dcba;
+    background:
+      radial-gradient(1100px 480px at 50% -8%, rgba(201,162,75,.16) 0%, transparent 62%),
+      radial-gradient(ellipse at 85% 15%, rgba(201,162,75,.05) 0%, transparent 55%),
+      radial-gradient(ellipse at 8% 100%, #3a2a18 0%, transparent 55%),
+      linear-gradient(160deg,#130d07 0%,#1d140b 55%,#0c0905 100%);
+    min-height:100vh; display:flex; flex-direction:column; align-items:center;
+    padding:22px 12px 44px;
+  }
+  /* ---------- 玄学馆总导航 ---------- */
+  .xz-nav{ width:100%; max-width:1000px; margin:0 auto 14px; display:flex; align-items:center;
+    justify-content:space-between; gap:6px 10px; flex-wrap:wrap;
+    background:linear-gradient(180deg,rgba(22,12,4,.78),rgba(22,12,4,.58));
+    border:1px solid rgba(201,162,75,.55); border-radius:999px;
+    padding:7px 14px 7px 18px; box-shadow:0 6px 18px rgba(0,0,0,.35); }
+  .xz-nav .xz-brand{ font-weight:bold; font-size:16px; letter-spacing:3px; color:#f0d58a;
+    text-decoration:none; white-space:nowrap; }
+  .xz-nav .xz-brand small{ font-size:11px; letter-spacing:2px; color:#cbb888; font-weight:normal; margin-left:8px; }
+  .xz-nav .xz-links{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .xz-nav .xz-links a{ display:inline-block; white-space:nowrap; font-family:inherit;
+    text-decoration:none; border-radius:999px; border:1px solid rgba(201,162,75,.4);
+    padding:4px 12px; font-size:13.5px; letter-spacing:1px; color:#e9d9ab;
+    background:linear-gradient(180deg,rgba(201,162,75,.1),rgba(201,162,75,.03)); transition:all .18s; }
+  .xz-nav .xz-links a:hover{ color:#fff6e0; border-color:#e0bd6a;
+    background:linear-gradient(180deg,rgba(201,162,75,.32),rgba(201,162,75,.14));
+    box-shadow:0 0 12px rgba(201,162,75,.3); }
+  .xz-nav .xz-on{ margin:0 auto; display:inline-block; white-space:nowrap; font-family:inherit;
+    text-decoration:none; border-radius:999px; border:1px solid rgba(240,190,120,.75);
+    padding:6px 24px; font-size:18px; font-weight:bold; letter-spacing:4px; color:#fff6e0;
+    background:linear-gradient(180deg,#bf5b40,#8c2418); transform:translateX(4em);
+    box-shadow:0 0 16px rgba(230,150,90,.42), inset 0 1px 0 rgba(255,255,255,.3); }
+  @media (max-width:640px){
+    .xz-nav{ margin-bottom:10px; }
+    .xz-nav .xz-brand{ font-size:14px; letter-spacing:2px; }
+    .xz-nav .xz-brand small{ display:none; }
+    .xz-nav .xz-links{ gap:4px; }
+    .xz-nav .xz-links a{ font-size:12.5px; padding:3px 8px; letter-spacing:0; }
+    .xz-nav .xz-on{ font-size:16px; letter-spacing:2px; padding:4px 16px; margin:0 auto; }
+  }
+  .frame{
+    width:100%; max-width:1000px;
+    background:
+      radial-gradient(760px 300px at 50% 0%, rgba(201,162,75,.12), transparent 62%),
+      linear-gradient(180deg,rgba(38,24,10,.92) 0%,rgba(14,9,5,.96) 55%,rgba(20,13,7,.94) 100%);
+    border:2px solid rgba(201,162,75,.75); border-radius:12px;
+    box-shadow:0 18px 60px rgba(0,0,0,.72), 0 0 44px rgba(201,162,75,.08), inset 0 1px 0 rgba(255,224,150,.16);
+    padding:30px 28px 32px; position:relative;
+  }
+  .frame::before,.frame::after{
+    content:"☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷"; position:absolute; left:0; right:0;
+    text-align:center; color:rgba(201,162,75,.5); font-size:13px; letter-spacing:6px; pointer-events:none;
+  }
+  .frame::before{ top:-19px; }
+  .frame::after{ bottom:-19px; content:"✦ 玄 学 之 门 · 四 馆 常 开 ✦"; letter-spacing:4px; }
+  header{ text-align:center; margin-bottom:4px; }
+  .plaque{ position:relative; }
+  .plaque::before,.plaque::after{ content:""; position:absolute; top:50%; width:10px; height:10px; border-radius:50%;
+    background:radial-gradient(circle,#ffe6a8,#c9a24b 70%); box-shadow:0 0 12px rgba(201,162,75,.85);
+    transform:translateY(-50%); }
+  .plaque::before{ left:-17px; } .plaque::after{ right:-17px; }
+  .plaque-top{ font-size:13px; letter-spacing:7px; color:#cdb06a; margin-bottom:9px; }
+  .shop-name{ font-size:38px; font-weight:bold; letter-spacing:10px; color:#f4d489;
+    text-shadow:0 2px 3px rgba(0,0,0,.85), 0 0 26px rgba(244,205,120,.35); }
+  .plaque-line{ margin-top:9px; font-size:12.5px; letter-spacing:6px; color:#c2a45f; }
+  .motto{ margin-top:22px; padding-top:16px; text-align:center; font-size:14.5px; color:#cfbe92; line-height:2;
+    border-top:1px dashed rgba(201,162,75,.35); }
+  .divider{ border:none; border-top:1px dashed rgba(201,162,75,.4); margin:18px 0; }
+
+  .hall-note{ font-size:14px; color:#d9c9a3; line-height:2.1; text-align:center; margin-bottom:6px; }
+  .halls{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; margin-top:14px; }
+  .hall{ position:relative; display:block; text-decoration:none; border-radius:14px; overflow:hidden;
+    aspect-ratio:4/3; isolation:isolate;
+    border:1px solid rgba(190,150,70,.6); box-shadow:0 6px 16px rgba(0,0,0,.35);
+    transition:box-shadow .3s, border-color .3s; }
+  .hall:hover{ box-shadow:0 12px 28px rgba(0,0,0,.5); border-color:rgba(255,216,130,.9); }
+  .hall .h-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    animation:hall-br 14s ease-in-out infinite alternate; will-change:transform; }
+  .hall:hover .h-img{ animation-duration:5.5s; filter:brightness(1.06); }
+  @keyframes hall-br{ from{ transform:scale(1.02); } to{ transform:scale(1.13) translateY(-5px); } }
+  .hall .h-veil{ position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg,rgba(12,8,3,.68),rgba(12,8,3,.1) 42%,rgba(12,8,3,.34) 64%,rgba(8,5,2,.86)); }
+  .hall .h-frame{ position:absolute; inset:9px; z-index:2; border:1px solid rgba(240,210,135,.55); border-radius:9px;
+    display:flex; flex-direction:column; align-items:flex-start; text-align:left; padding:13px 13px 12px; }
+  .hall .h-tag{ align-self:center; font-size:16.5px; letter-spacing:4px; color:#ffe9bd;
+    background:linear-gradient(180deg,rgba(40,24,8,.82),rgba(15,9,4,.66));
+    border:1px solid var(--glow); border-radius:8px; padding:6px 20px; white-space:nowrap; line-height:1.3;
+    box-shadow:0 0 18px rgba(0,0,0,.4), inset 0 0 12px rgba(255,220,150,.08);
+    text-shadow:0 0 10px var(--glow); }
+  .hall .h-core{ flex:1; display:flex; flex-direction:column; align-items:flex-start;
+    justify-content:flex-start; gap:7px; margin-top:14px; }
+  .hall .h-title{ font-size:29px; font-weight:bold; letter-spacing:8px; padding-left:8px; color:#ffedc6;
+    animation:title-pulse 3.4s ease-in-out infinite; }
+  @keyframes title-pulse{ 0%,100%{ text-shadow:0 2px 10px rgba(0,0,0,.55),0 0 14px rgba(255,206,110,.3); }
+    50%{ text-shadow:0 2px 10px rgba(0,0,0,.55),0 0 30px rgba(255,216,130,.95); } }
+  .hall .h-sub{ font-size:13px; letter-spacing:3px; color:#ece0c2; text-shadow:0 1px 5px rgba(0,0,0,.85); }
+  .hall .h-cta{ font-size:15px; letter-spacing:5px; padding-left:5px; color:#fff6e0; border-radius:7px;
+    padding:8px 0; width:100%; text-align:center;
+    box-shadow:0 3px 0 rgba(0,0,0,.35), 0 0 18px rgba(255,210,120,.12); }
+  .hall-a{ --c1:#b9533f; --c2:#7c1f15; --glow:#ffb8a0; }
+  .hall-b{ --c1:#5f8fa6; --c2:#33586e; --glow:#aee0f5; }
+  .hall-c{ --c1:#94ab55; --c2:#5c7428; --glow:#d8ee9c; }
+  .hall-d{ --c1:#8f74bd; --c2:#5a3a85; --glow:#cfb6f0; }
+  .hall .h-cta{ background:linear-gradient(180deg,var(--c1),var(--c2)); }
+  .hall::before{ content:""; position:absolute; top:-25%; bottom:-25%; left:-75%; width:45%; z-index:3;
+    opacity:0; transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,244,214,.55),transparent); pointer-events:none; }
+  .hall:hover::before{ animation:sheen .9s ease; }
+  @keyframes sheen{ to{ transform:skewX(-18deg) translateX(480%); } }
+  .h-all{ margin-top:16px; text-align:center; font-size:13.5px; color:#bea96f; }
+  .btn-lucky{ font-family:inherit; font-size:13.5px; letter-spacing:2px; cursor:pointer;
+    color:#e6d29a; background:rgba(255,255,255,.05); border:1px solid #b3924f; border-radius:30px;
+    padding:8px 24px; margin-top:12px; transition:all .18s; }
+  .btn-lucky:hover{ background:rgba(201,162,75,.22); color:#ffe9bd; box-shadow:0 0 16px rgba(201,162,75,.25); }
+
+  .yujian{ margin-top:18px; font-size:14px; color:#e8dcc0; background:rgba(150,60,40,.14);
+    border:1px dashed rgba(235,170,120,.45); border-radius:8px; padding:10px 14px; line-height:1.9; }
+  .yujian b{ color:#ffb98f; font-weight:normal; }
+  .disclaimer{ margin-top:14px; font-size:12px; color:#9c8b68; line-height:1.9; text-align:center;
+    border-top:1px dashed rgba(201,162,75,.4); padding-top:12px; }
+
+  @media (min-width:821px){ .halls{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:820px){ .halls{ grid-template-columns:1fr; } }
+  @media (max-width:640px){
+    body{ padding:18px 10px 36px; }
+    .frame{ padding:24px 14px 26px; }
+    .shop-name{ font-size:26px; letter-spacing:6px; }
+    .plaque-top{ letter-spacing:4px; font-size:12px; }
+  }
+
+  /* ================= 联系馆主 · 四馆结果结缘 ================= */
+  .contact-bar{ margin-top:4px; text-align:center; }
+  .btn-contact{ margin-top:6px; border-color:#c9a24b;
+    background:linear-gradient(180deg,rgba(201,162,75,.24),rgba(201,162,75,.06)); }
+  .btn-contact:not(:disabled):hover{ background:linear-gradient(180deg,rgba(201,162,75,.4),rgba(201,162,75,.16)); }
+  .btn-contact:disabled{ opacity:.45; cursor:not-allowed; filter:grayscale(.35); }
+  .contact-state{ display:block; margin-top:8px; font-size:12.5px; letter-spacing:1px;
+    color:#b8a26f; line-height:1.8; }
+  .co-ov{ position:fixed; inset:0; z-index:70; display:none; align-items:flex-start;
+    justify-content:center; overflow:auto; padding:26px 12px; background:rgba(6,4,1,.76); }
+  .co-box{ position:relative; width:100%; max-width:660px; margin:0 auto;
+    background:
+      radial-gradient(560px 240px at 50% 0%, rgba(201,162,75,.13), transparent 62%),
+      linear-gradient(180deg,rgba(40,25,10,.98),rgba(16,10,5,.99));
+    border:1px solid rgba(201,162,75,.8); border-radius:14px; padding:22px 22px 20px;
+    box-shadow:0 22px 70px rgba(0,0,0,.75); }
+  .co-x{ position:absolute; top:10px; right:13px; background:none; border:none;
+    color:#cbb888; font-size:21px; cursor:pointer; padding:2px 6px; }
+  .co-x:hover{ color:#fff0c8; }
+  .co-title{ text-align:center; font-size:19px; letter-spacing:5px; color:#f4d489; }
+  .co-sub{ font-size:13.5px; line-height:2; color:#d9c9a3; text-align:center; margin:10px 0 6px; }
+  .co-sub b{ color:#ffd9a0; font-weight:normal; }
+  .co-list{ border:1px dashed rgba(201,162,75,.45); border-radius:10px; padding:4px 14px; margin-top:8px; }
+  .co-row{ display:flex; align-items:center; justify-content:space-between; gap:10px;
+    flex-wrap:wrap; padding:8px 2px; border-bottom:1px dashed rgba(201,162,75,.22); font-size:14px; }
+  .co-row:last-child{ border-bottom:none; }
+  .co-row a{ color:#e8d29a; text-decoration:none; border-bottom:1px dotted rgba(232,210,154,.5); }
+  .co-row a:hover{ color:#fff3cf; }
+  .co-row .ok{ color:#bcd893; font-size:13px; }
+  .co-row .no{ color:#e0a98d; font-size:13px; }
+  .co-fld{ margin-top:14px; }
+  .co-fld label{ display:block; font-size:13px; color:#cfbe92; letter-spacing:1px; margin-bottom:6px; }
+  .co-input{ width:100%; font-family:inherit; font-size:15px; letter-spacing:1px; padding:10px 12px;
+    border-radius:8px; background:rgba(8,5,2,.55); color:#f2e5c4;
+    border:1px solid rgba(201,162,75,.5); outline:none; }
+  .co-input:focus{ border-color:#e0bd6a; box-shadow:0 0 10px rgba(201,162,75,.22); }
+  .co-ta{ width:100%; min-height:170px; margin-top:12px; padding:10px 12px; border-radius:8px;
+    resize:vertical; font-family:"Consolas","Courier New",monospace; font-size:12.5px;
+    line-height:1.75; background:rgba(6,4,1,.6); color:#efe0b6;
+    border:1px solid rgba(201,162,75,.4); outline:none; }
+  .co-btns{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px; }
+  .co-btn{ font-family:inherit; font-size:13px; letter-spacing:2px; cursor:pointer; color:#e9d9ab;
+    background:rgba(255,255,255,.05); border:1px solid #b3924f; border-radius:30px;
+    padding:9px 18px; transition:all .18s; }
+  .co-btn:hover:not(:disabled){ background:rgba(201,162,75,.22); color:#ffe9bd; }
+  .co-btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .co-primary{ background:linear-gradient(180deg,#b9533f,#7c1f15); border-color:#d0875f; color:#fff6e0; }
+  .co-primary:hover:not(:disabled){ background:linear-gradient(180deg,#c9624a,#8a2618); color:#fff; }
+  .co-priv{ font-size:12px; color:#9c8b68; line-height:1.8; text-align:center; margin-top:10px; }
+  .co-note{ margin-top:10px; }
+  @media (max-width:640px){
+    .co-box{ padding:18px 14px 16px; }
+    .co-ta{ min-height:130px; }
+    .co-btn{ padding:8px 13px; font-size:12.5px; letter-spacing:1px; }
+  }
+</style>
+</head>
+<body>
+<div class="xz-nav">
+  <span class="xz-brand">深情猫玄学馆<small>玄 学 四 馆</small></span>
+  <span class="xz-on">首页</span>
+  <span class="xz-links">
+    <a href="bazi/index.html">子平八字</a>
+    <a href="iching/index.html">周易起卦</a>
+    <a href="digit/index.html">数字能量</a>
+    <a href="tarot/index.html">塔罗占卜</a>
+  </span>
+</div>
+
+<div class="frame">
+  <header>
+    <div class="plaque">
+      <div class="plaque-top">深 情 猫 玄 学 馆 · 欢 迎 入 座</div>
+      <div class="shop-name">深 情 猫 玄 学 馆</div>
+      <div class="plaque-line">✦ 命 理 · 占 卜 · 数 字 · 塔 罗 · 四 门 常 开 ✦</div>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <div class="hall-note">本馆设四门，任君所需：</div>
+
+  <div class="halls">
+
+    <a class="hall hall-a" href="bazi/index.html">
+      <img class="h-img" src="img/hall-bazi.png" alt="子平八字 · 排盘详批">
+      <span class="h-veil"></span>
+      <span class="h-frame">
+        <span class="h-tag">第一门 · 命理</span>
+        <span class="h-core">
+          <span class="h-title">子平八字</span>
+          <span class="h-sub">排盘详批 · 大运流年 · 白话命书</span>
+        </span>
+        <span class="h-cta">入 命 理 馆</span>
+      </span>
+    </a>
+
+    <a class="hall hall-b" href="iching/index.html">
+      <img class="h-img" src="img/hall-iching.png" alt="周易起卦 · 数字起卦">
+      <span class="h-veil"></span>
+      <span class="h-frame">
+        <span class="h-tag">第二门 · 占卜</span>
+        <span class="h-core">
+          <span class="h-title">周易起卦</span>
+          <span class="h-sub">静心仪轨 · 数字起卦 · 白话解卦</span>
+        </span>
+        <span class="h-cta">入 占 卜 馆</span>
+      </span>
+    </a>
+
+    <a class="hall hall-c" href="digit/index.html">
+      <img class="h-img" src="img/hall-digit.png" alt="数字能量 · 号码解析">
+      <span class="h-veil"></span>
+      <span class="h-frame">
+        <span class="h-tag">第三门 · 数字</span>
+        <span class="h-core">
+          <span class="h-title">数字能量</span>
+          <span class="h-sub">八星磁场 · 五行契合 · 尾号参考</span>
+        </span>
+        <span class="h-cta">入 数 字 馆</span>
+      </span>
+    </a>
+
+    <a class="hall hall-d" href="tarot/index.html">
+      <img class="h-img" src="img/hall-tarot.png" alt="塔罗占卜 · 抽牌解心事">
+      <span class="h-veil"></span>
+      <span class="h-frame">
+        <span class="h-tag">第四门 · 塔罗</span>
+        <span class="h-core">
+          <span class="h-title">塔罗占卜</span>
+          <span class="h-sub">78张牌精讲 · 正逆位细读 · 身边小例</span>
+        </span>
+        <span class="h-cta">入 塔 罗 馆</span>
+      </span>
+    </a>
+
+  </div>
+
+  <div class="h-all">
+    不知先去哪一门？
+    <button class="btn-lucky" type="button" onclick="location.href=['bazi/index.html','iching/index.html','digit/index.html','tarot/index.html'][Math.floor(Math.random()*4)]">随 缘 一 测</button>
+  </div>
+
+  <div class="contact-bar">
+    <button class="btn-lucky btn-contact" type="button" id="btnContact" onclick="xzOpenContact()">联 系 馆 主</button>
+    <span class="contact-state" id="contactState"></span>
+  </div>
+
+  <div class="motto">命盘是一张地图，卦象是一面当下的镜子——
+    知命而不认命，问卦而不迷卦。路，始终在自己脚下。</div>
+
+  <div class="yujian"><b>结缘留灯：</b>命盘想细问流年应期、事业姻缘，或卦象想问何月见机、如何化解——可加微信 <b>luyu11888</b> 详聊，备注「深情猫玄学馆」即可。</div>
+
+  <div class="disclaimer">
+    命是弱者的借口，运是强者的谦辞；卦是镜子，不是签筒。<br>
+    本馆用于传统文化学习与娱乐参考，不构成任何决策、医疗、投资或法律建议。<br>
+    排盘历法由开源库 lunar.js（6tail，MIT）计算；白话文字均为本馆依传统文化常识自行撰写。字字皆参考，句句别当真。
+  </div>
+</div>
+
+<!-- ================= 联系馆主 · 四馆结果结缘 ================= -->
+<div class="co-ov" id="coOv">
+  <div class="co-box">
+    <button class="co-x" type="button" id="coClose" title="合上">✕</button>
+    <div class="co-title">联 系 馆 主 · 结 缘 递 结 果</div>
+    <div class="co-sub">测完的馆，结果已替你收在同一处。留个手机号，把<b>四馆结果＋手机号</b>一并带给馆主——馆主细看后会按你留的方式回你。也可复制全文，或用邮箱发送。</div>
+    <div class="co-list" id="coList"></div>
+    <div class="co-fld">
+      <label for="coPhone">测试者手机号（可留可不留 · 留了馆主才好回电细聊）</label>
+      <input class="co-input" id="coPhone" type="tel" inputmode="numeric" maxlength="11" placeholder="11 位手机号，例如 13800138000">
+    </div>
+    <textarea class="co-ta" id="coText" readonly spellcheck="false"></textarea>
+    <div class="co-btns">
+      <button class="co-btn co-primary" type="button" id="coSubmit">留 号 递 结 果 · 馆 主 回 电 细 聊</button>
+      <button class="co-btn" type="button" id="coCopy">复 制 结 果 ＋ 手 机 号</button>
+      <button class="co-btn" type="button" id="coMail">用 邮 箱 发 送</button>
+    </div>
+    <p class="co-priv">隐私承诺：这份结果与手机号仅用于馆主陪你细聊，不存不外传、不做营销轰炸。测过几馆就带几馆，随缘即可。</p>
+    <div class="co-note" id="coNote" style="display:none;"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+ * 联系馆主 · 四馆结果结缘（主页）
+ * 说明：
+ *  - 四馆（bazi/iching/digit/tarot）测完会在各自页面把结果快照
+ *    写入 localStorage['sqm_results_v1']（四页同源共享）。
+ *  - 本面板把已测各馆结果＋手机号汇成一段文字，支持：
+ *    ① 留号递送（formsubmit → 馆主邮箱）② 复制全文 ③ mailto 邮箱发送。
+ *  - 至少测完一门（任一馆）后方可递送/复制/发送。
+ * ============================================================ */
+var XZ_CFG = {
+  email: 'luyu111888@gmail.com',                                    /* ★ 馆主邮箱（mailto 收件人） */
+  endpoint: 'https://formsubmit.co/ajax/luyu111888@gmail.com',      /* ★ 留号递结果接口（换邮箱需同步） */
+  subject: '深情猫玄学馆 · 四馆测试结果 · 结缘',
+  wx: 'luyu11888'
+};
+var XZ_HALLS = [
+  ['bazi', '子平八字', 'bazi/index.html'],
+  ['iching', '周易起卦', 'iching/index.html'],
+  ['digit', '数字能量', 'digit/index.html'],
+  ['tarot', '塔罗占卜', 'tarot/index.html']
+];
+function xz$(id) { return document.getElementById(id); }
+function xzRead() {
+  try {
+    var a = JSON.parse(localStorage.getItem('sqm_results_v1') || '{}');
+    return (a && typeof a === 'object') ? a : {};
+  } catch (e) { return {}; }
+}
+function xzDoneCount(all) {
+  var n = 0, i;
+  for (i = 0; i < XZ_HALLS.length; i++) {
+    var r = all[XZ_HALLS[i][0]];
+    if (r && r.text) n++;
+  }
+  return n;
+}
+function xzPhoneVal() {
+  var el = xz$('coPhone');
+  return el ? el.value.replace(/\D/g, '') : '';
+}
+function xzCompose(all, phone) {
+  var L = [];
+  L.push('【深情猫玄学馆 · 四馆测试结果 · 联系馆主】');
+  L.push('测试者手机号：' + (phone || '（未留 · 请馆主以邮件回复本份结果即可）'));
+  var doneIds = [], i, rec;
+  for (i = 0; i < XZ_HALLS.length; i++) {
+    rec = all[XZ_HALLS[i][0]];
+    if (rec && rec.text) doneIds.push(XZ_HALLS[i][0]);
+  }
+  if (!doneIds.length) {
+    L.push('');
+    L.push('（尚未测完任何一门。请先回任一馆测过——子平八字 / 周易起卦 / 数字能量 / 塔罗占卜——再来联系馆主。）');
+    return L.join('\n');
+  }
+  for (i = 0; i < XZ_HALLS.length; i++) {
+    var id = XZ_HALLS[i][0];
+    rec = all[id];
+    if (!rec || !rec.text) continue;
+    L.push('');
+    L.push('◆ ' + (rec.label || XZ_HALLS[i][1]) + '（测于 ' + rec.time + '）');
+    L.push(rec.text);
+  }
+  if (doneIds.length < 4) {
+    var miss = [];
+    for (i = 0; i < XZ_HALLS.length; i++) {
+      if (doneIds.indexOf(XZ_HALLS[i][0]) === -1) miss.push(XZ_HALLS[i][1]);
+    }
+    L.push('');
+    L.push('（另有 ' + miss.join('、') + ' 尚未测，可回馆补测后，再来把四馆结果一并带给馆主。）');
+  }
+  return L.join('\n');
+}
+function xzNote(html) {
+  var n = xz$('coNote');
+  if (!n) return;
+  if (!html) { n.style.display = 'none'; n.innerHTML = ''; return; }
+  n.innerHTML = html;
+  n.style.display = 'block';
+}
+function xzLegacyCopy(t, cb) {
+  var ta = document.createElement('textarea');
+  ta.value = t;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  if (cb) cb();
+  document.body.removeChild(ta);
+}
+function xzCopyText(t, okMsg) {
+  var done = function () {
+    xzNote('<div style="text-align:center;background:#eef3ea;border:1px solid #b7ccb2;border-radius:10px;padding:12px 10px;font-size:13px;color:#2f6f4e;line-height:1.9;"><b>已复制 ✓</b><br>' + okMsg + '</div>');
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t).then(done, function () { xzLegacyCopy(t, done); });
+  } else { xzLegacyCopy(t, done); }
+}
+function xzRenderList() {
+  var box = xz$('coList');
+  if (!box) return;
+  var all = xzRead(), h = '', i;
+  for (i = 0; i < XZ_HALLS.length; i++) {
+    var id = XZ_HALLS[i][0], nm = XZ_HALLS[i][1], url = XZ_HALLS[i][2], rec = all[id];
+    h += '<div class="co-row"><span>' + nm + '</span>' +
+      (rec && rec.text
+        ? '<span class="ok">✓ 已测 · ' + rec.time + '　<a href="' + url + '">回馆重测</a></span>'
+        : '<span class="no">未测 · <a href="' + url + '">去测</a></span>') +
+      '</div>';
+  }
+  box.innerHTML = h;
+}
+function xzRefreshText() {
+  var el = xz$('coText');
+  if (!el) return;
+  var all = xzRead();
+  el.value = xzCompose(all, xzPhoneVal());
+  var dis = xzDoneCount(all) === 0, i, names = ['coSubmit', 'coCopy', 'coMail'];
+  for (i = 0; i < names.length; i++) {
+    var b = xz$(names[i]);
+    if (b) b.disabled = dis;
+  }
+}
+function xzOpenContact() {
+  xzRenderList();
+  xzRefreshText();
+  xzNote('');
+  var ov = xz$('coOv');
+  if (ov) ov.style.display = 'flex';
+}
+function xzCloseContact() {
+  var ov = xz$('coOv');
+  if (ov) ov.style.display = 'none';
+  xzNote('');
+}
+function xzMail() {
+  var all = xzRead(), done = xzDoneCount(all);
+  if (!done) return;
+  var body = xzCompose(all, xzPhoneVal());
+  var u = 'mailto:' + encodeURIComponent(XZ_CFG.email) +
+    '?subject=' + encodeURIComponent(XZ_CFG.subject + ' · 已测 ' + done + ' 门') +
+    '&body=' + encodeURIComponent(body);
+  xzNote('<div style="text-align:center;background:#fdf6e7;border:1px solid #e3cf9f;border-radius:10px;padding:10px;font-size:13px;color:#8a6d1f;line-height:1.9;">正在唤起你的邮箱…正文较长时或会被截断，届时请用「复制」按钮复制全文再粘贴发送。</div>');
+  window.location.href = u;
+}
+function xzSubmit() {
+  var all = xzRead(), done = xzDoneCount(all);
+  if (!done) return;
+  var phone = xzPhoneVal();
+  if (phone && !/^1\d{10}$/.test(phone)) {
+    xzNote('<div style="text-align:center;background:#fbeae4;border:1px solid #dfb09c;border-radius:10px;padding:10px;font-size:13px;color:#a0392a;">手机号格式不对，请核对（1 开头 11 位）。</div>');
+    return;
+  }
+  var btn = xz$('coSubmit');
+  if (!btn || btn.disabled) return;
+  btn.disabled = true;
+  var ot = btn.textContent;
+  btn.textContent = '递 送 中…';
+  var doneFn = function (ok) {
+    btn.disabled = false;
+    btn.textContent = ot;
+    if (ok) {
+      xzNote('<div style="text-align:center;background:#eef3ea;border:1px solid #b7ccb2;border-radius:10px;padding:12px 10px;font-size:13px;color:#2f6f4e;line-height:1.9;"><b>已妥投 ✓</b><br>' +
+        (phone ? '你的手机号与这份结果都已送到馆主那里，1~2 日内会回电陪你细聊。' : '你的结果已送到馆主邮箱，会用你留的方式回你。') + '</div>');
+    } else {
+      xzCopyText(xzCompose(all, phone), '在线投递没打通，已帮你复制好，去邮箱粘贴发送即可；或点「用邮箱发送」。');
+    }
+  };
+  if (!XZ_CFG.endpoint) { doneFn(false); return; }
+  try {
+    var halls = [], i;
+    for (i = 0; i < XZ_HALLS.length; i++) {
+      var rec = all[XZ_HALLS[i][0]];
+      if (rec && rec.text) halls.push(rec.label || XZ_HALLS[i][1]);
+    }
+    fetch(XZ_CFG.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: XZ_CFG.subject + ' · 已测 ' + done + ' 门' + (phone ? ' · 手机尾号 ' + phone.slice(-4) : ''),
+        _captcha: 'false',
+        name: '深情猫玄学馆 · 访客',
+        phone: phone,
+        halls: halls.join('、'),
+        report: xzCompose(all, phone)
+      })
+    }).then(function (r) { doneFn(r && r.ok); }).catch(function () { doneFn(false); });
+  } catch (e) { doneFn(false); }
+}
+function xzRefreshState() {
+  var all = xzRead(), done = xzDoneCount(all);
+  var btn = xz$('btnContact'), st = xz$('contactState');
+  if (btn) {
+    btn.disabled = done === 0;
+    btn.textContent = done === 0 ? '联 系 馆 主' : '联 系 馆 主 · 已测 ' + done + ' 门';
+    btn.title = done === 0 ? '先测完至少一门，方可把结果带给馆主' : '把已测的结果＋手机号一并带给馆主';
+  }
+  if (st) {
+    st.textContent = done === 0
+      ? '测完至少一门（八字 / 起卦 / 数字 / 塔罗），此钮即亮——四馆结果与手机号可一并带给馆主细聊'
+      : '已测 ' + done + ' 门：结果＋手机号会一并送到馆主那里，馆主细看后按你留的方式回你。';
+  }
+}
+function xzBind() {
+  var ov = xz$('coOv');
+  var c = xz$('coClose');
+  if (c) c.addEventListener('click', xzCloseContact);
+  if (ov) ov.addEventListener('click', function (e) { if (e.target === ov) xzCloseContact(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') xzCloseContact(); });
+  var ph = xz$('coPhone');
+  if (ph) ph.addEventListener('input', xzRefreshText);
+  var cp = xz$('coCopy');
+  if (cp) cp.addEventListener('click', function () {
+    if (!xz$('coText') || xzDoneCount(xzRead()) === 0) return;
+    xzCopyText(xz$('coText').value, '结果＋手机号已复制，去邮箱粘贴发送即可。');
+  });
+  var ml = xz$('coMail');
+  if (ml) ml.addEventListener('click', xzMail);
+  var sb = xz$('coSubmit');
+  if (sb) sb.addEventListener('click', xzSubmit);
+  window.addEventListener('storage', function (e) { if (e && e.key === 'sqm_results_v1') xzRefreshState(); });
+  xzRefreshState();
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', xzBind);
+} else {
+  xzBind();
+}
+</script>
+</body>
+</html>
