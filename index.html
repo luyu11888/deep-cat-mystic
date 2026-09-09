@@ -118,6 +118,23 @@
   .hall:hover::before{ animation:sheen .9s ease; }
   @keyframes sheen{ to{ transform:skewX(-18deg) translateX(480%); } }
   .h-all{ margin-top:16px; text-align:center; font-size:13.5px; color:#bea96f; }
+
+  /* 另有心斋 · 四门之外一处不测命理的小馆（低调一角，不占四门气象） */
+  .peer-note{ margin:15px 0 4px; padding-top:13px; border-top:1px dashed rgba(201,162,75,.26);
+    text-align:center; font-size:12.5px; letter-spacing:1px; color:#77683f; line-height:2.1; }
+  .peer-note .peer-mind{ display:inline-flex; align-items:center; gap:8px; vertical-align:middle;
+    text-decoration:none; margin:0 4px; padding:2px 9px; border-radius:9px; transition:all .18s; }
+  .peer-note .peer-mind:hover{ background:rgba(201,162,75,.1);
+    box-shadow:0 0 10px rgba(201,162,75,.16); }
+  .peer-note .pm-seal{ width:21px; height:21px; border-radius:50%; flex:none;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-family:inherit; font-size:13px; font-weight:bold; color:#ffe6cd;
+    background:radial-gradient(circle at 32% 28%, #c96a45 0%, #7c1f15 82%);
+    box-shadow:0 0 6px rgba(190,80,50,.42); }
+  .peer-note .pm-name{ font-size:14px; font-weight:bold; letter-spacing:2px; color:#c9b184;
+    transition:color .18s; }
+  .peer-note .peer-mind:hover .pm-name{ color:#ffe9bd; }
+  .peer-note .pm-hint{ font-size:11.5px; letter-spacing:1px; color:#77683f; }
   .btn-lucky{ font-family:inherit; font-size:13.5px; letter-spacing:2px; cursor:pointer;
     color:#e6d29a; background:rgba(255,255,255,.05); border:1px solid #b3924f; border-radius:30px;
     padding:8px 24px; margin-top:12px; transition:all .18s; }
@@ -281,6 +298,17 @@
     <button class="btn-lucky" type="button" onclick="location.href=['bazi/index.html','iching/index.html','digit/index.html','tarot/index.html'][Math.floor(Math.random()*4)]">随 缘 一 测</button>
   </div>
 
+  <!-- 另有心斋 · 四门之外（心斋亦出《庄子》，与玄学同源，故在此留一道低调的旁门） -->
+  <div class="peer-note">
+    四门之外，另有一斋——
+    <a class="peer-mind" id="peerMind" href="#" aria-label="心斋 · 心理学修习馆 · 新窗打开"
+      title="心斋 · 心理学修习馆（新窗打开）">
+      <span class="pm-seal">心</span>
+      <span class="pm-name">心斋 · 心理学修习馆</span>
+    </a>
+    <span class="pm-hint">不测命理 · 只管安心</span>
+  </div>
+
   <div class="contact-bar">
     <button class="btn-lucky btn-contact" type="button" id="btnContact" onclick="xzOpenContact()">联 系 馆 主</button>
     <span class="contact-state" id="contactState"></span>
@@ -334,7 +362,9 @@ var XZ_CFG = {
   email: 'luyu111888@gmail.com',                                    /* ★ 馆主邮箱（mailto 收件人） */
   endpoint: 'https://formsubmit.co/ajax/luyu111888@gmail.com',      /* ★ 留号递结果接口（换邮箱需同步） */
   subject: '深情猫玄学馆 · 四馆测试结果 · 结缘',
-  wx: 'luyu11888'
+  wx: 'luyu11888',
+  peer: { name: '心斋 · 心理学修习馆',
+          url: 'https://luyu11888.github.io/xinzhai/' }   /* ★ 邻馆心斋线上首页（GitHub Pages），为空则本地回退 ../psych/index.html */
 };
 var XZ_HALLS = [
   ['bazi', '子平八字', 'bazi/index.html'],
@@ -549,6 +579,16 @@ if (document.readyState === 'loading') {
 } else {
   xzBind();
 }
+/* ================= 邻馆引路 · 心斋（心理馆） ================= */
+(function () {
+  var p = document.getElementById('peerMind');
+  if (!p) return;
+  var fallback = '../psych/index.html';
+  var u = (XZ_CFG && XZ_CFG.peer && XZ_CFG.peer.url) || fallback;
+  p.href = u;
+  p.target = '_blank';
+  p.rel = 'noopener';
+})();
 </script>
 </body>
 </html>
