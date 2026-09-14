@@ -627,7 +627,7 @@
     ["cai", "财", "财运"], ["zhai", "宅", "家宅"], ["shi", "业", "事业"],
     ["qing", "情", "姻缘"], ["kang", "康", "康健"]
   ];
-  function fiveFieldHtml(key){
+  function fiveFieldHtml(key, huangNote, liNote){
     var five = HEX_FIVE[key];
     if (!five) return "";
     var act = HEX_FIVE_ACT[key] || {};
@@ -637,8 +637,8 @@
       var k = FIVE_META[i][0], txt = five[k], adv = act[k];
       if (!txt) continue;
       var extraNote = "";
-      if (k === "kang" && MN_huang) extraNote = '<div class="f-adv" style="background:rgba(201,162,75,.12);color:#5b3a1a;"><b style="color:#8a6d3b;">黄鉴 · 疾病预测：</b>' + MN_huang + '</div>';
-      if (k === "shi" && MN_li) extraNote = '<div class="f-adv" style="background:rgba(163,51,39,.06);color:#5b3a1a;"><b style="color:var(--red);">李洪成 · 实战策略：</b>' + MN_li + '</div>';
+      if (k === "kang" && huangNote) extraNote = '<div class="f-adv" style="background:rgba(201,162,75,.12);color:#5b3a1a;"><b style="color:#8a6d3b;">黄鉴 · 疾病预测：</b>' + huangNote + '</div>';
+      if (k === "shi" && liNote) extraNote = '<div class="f-adv" style="background:rgba(163,51,39,.06);color:#5b3a1a;"><b style="color:var(--red);">李洪成 · 实战策略：</b>' + liNote + '</div>';
       h += '<div class="f-item"><div class="f-top"><span class="f-tag">' + FIVE_META[i][1] +
         '</span><span class="f-name">' + FIVE_META[i][2] + "</span></div>" +
         '<div class="f-txt">' + txt + "</div>" +
@@ -751,13 +751,11 @@
       '<div class="wx-row"><button class="wx-badge" id="btnWx">＋ 复制微信号：luyu11888</button><span id="wxTip" style="font-size:13px; color:#7a6a4a;"></span></div>' +
       '<div class="pay-row"><button class="btn-mini btn-lamp" id="btnTip">✦ 随 喜 添 灯 · 供 养 铺 子</button></div>';
 
-    var MN_huang = MN.huang || "";
-    var MN_li = MN.li || "";
     $("resultInner").innerHTML =
       '<div class="basis">' + basis + "</div>" +
       '<div class="cards">' + cards + "</div>" +
       '<div class="overall">' + overall + "</div>" +
-      fiveFieldHtml("" + up + low) +
+      fiveFieldHtml("" + up + low, MN.huang || "", MN.li || "") +
       '<div class="consult">' + consult + "</div>";
 
     var wx = $("btnWx");
