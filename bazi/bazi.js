@@ -34,9 +34,6 @@ function shiShenName(dayGan, otherGan) {
 /* 天干地支对日主的五行关系描述 */
 function relLabel(dayGan, otherGan) { return relOf(dayGan, otherGan); }
 
-/* 地支主气五行 */
-function zhiMainWx(zhi) { return ZHI_DETAIL[zhi].wx; }
-
 function unique(a) { var o = {}, r = []; a.forEach(function (x) { if (!o[x]) { o[x] = 1; r.push(x); } }); return r; }
 function isYangGan(g) { return GAN_DETAIL[g].yy === '阳'; }
 
@@ -186,6 +183,168 @@ function energyBar(r) {
   return out;
 }
 
+/* ============================================================
+ * 旺衰判定 strengthOf（身强 / 身弱 精确化）
+ * 双轨合成，避免单一规则误判：
+ *  A. 三要素评分（0-100）：得令 40 / 得地 30 / 得势 30
+ *     - 得令细分：本气比劫(40) > 本气印(30) > 藏干比根(22) > 藏印(18) > 失令(6-10)
+ *     - 得地按藏干本/中/余气分权，且计入印根（打六折）
+ *     - 得势区分比劫(10)/印(7)，虚浮无根者打折
+ *  B. 同党（印比，含日主本体）与异党（财官食伤）加权能量占比
+ *     - 藏干本/中/余气 1.3/0.7/0.4，柱位权重 月1.4 > 日1.0 > 时0.8 > 年0.6
+ *     - 印按 0.65 计，天干虚浮减半
+ * 修正项：月令被冲（提纲七折）、根被冲（七折）、三合成局/半合化气
+ * 综合分 = A×0.5 + B×0.5，按阈值分五档，极端时提示从格/专旺之象。
+ * ============================================================ */
+function strengthOf(pillars, dayGan) {
+  var dayWx = GAN_DETAIL[dayGan].wx, yinWx = '';
+  var i;
+  for (i = 0; i < WX_ORDER.length; i++) if (WX_SHENG[WX_ORDER[i]] === dayWx) yinWx = WX_ORDER[i];
+  var py = pillars[0], pm = pillars[1], pd = pillars[2], pt = pillars[3];
+  var branches = [py.zhi, pm.zhi, pd.zhi, pt.zhi];
+  var HIDE_RANK = ['本气', '中气', '余气'];
+  var ROOT_W = [10, 6, 3.5];      /* 比劫之根：本/中/余 */
+  var HID_W = [1.3, 0.7, 0.4];    /* 藏干能量：本/中/余 */
+  var POS_W = { y: 0.6, m: 1.4, d: 1.0, t: 0.8 };
+  var notes = [];
+
+  function wxOf(g) { return GAN_DETAIL[g].wx; }
+  function isTong(wx) { return wx === dayWx; }
+  function isYin(wx) { return wx === yinWx; }
+  function ganHasRoot(g) {
+    var wx = wxOf(g), ok = false;
+    pillars.forEach(function (p) { p.hides.forEach(function (hg) { if (wxOf(hg) === wx) ok = true; }); });
+    return ok;
+  }
+  function beichong(p) {
+    var z = p.zhi, hit = false;
+    pillars.forEach(function (q) { if (q !== p && ZHI_CHONG[q.zhi] === z) hit = true; });
+    return hit;
+  }
+
+  /* ---- A1. 得令（满分 40）：月支与日主之亲疏 ---- */
+  var mHides = pm.hides, mMainWx = wxOf(mHides[0]);
+  var mTongRank = -1, mYinRank = -1;
+  mHides.forEach(function (hg, idx) {
+    if (isTong(wxOf(hg)) && mTongRank < 0) mTongRank = idx;
+    if (isYin(wxOf(hg)) && mYinRank < 0) mYinRank = idx;
+  });
+  var sLing = 0, lingDesc = '';
+  if (mMainWx === dayWx) { sLing = 40; lingDesc = '得令（月令本气为比劫，日主当旺）'; }
+  else if (mMainWx === yinWx) { sLing = 30; lingDesc = '得生（月令本气为印，生身有力）'; }
+  else if (mTongRank > 0) { sLing = 22; lingDesc = '得气（月令' + HIDE_RANK[mTongRank] + '藏比劫之根）'; }
+  else if (mYinRank > 0) { sLing = 18; lingDesc = '微得生（月令' + HIDE_RANK[mYinRank] + '藏印）'; }
+  else if (WX_KE[dayWx] === mMainWx) { sLing = 10; lingDesc = '失令（月令本气为财，耗身）'; }
+  else if (WX_SHENG[dayWx] === mMainWx) { sLing = 8; lingDesc = '失令（月令本气为食伤，泄身）'; }
+  else { sLing = 6; lingDesc = '失令（月令本气为官杀，克身）'; }
+
+  /* 提纲被冲：分双向——月令为同党（帮身）则帮扶力七折；月令为异党（克泄耗）则敌方之力受损 */
+  var chongFriend = false, chongFoe = false;
+  if (beichong(pm)) {
+    if (sLing >= 18) {
+      sLing = Math.round(sLing * 0.7 * 10) / 10;
+      lingDesc += '；惟月令被冲，旺气七折';
+      notes.push('月令（提纲）为帮扶之物而被冲，当令之力按七折计');
+      chongFriend = true;
+    } else if (sLing <= 10) {
+      chongFoe = true;
+      lingDesc += '；月令被冲，克泄耗之力亦受牵制';
+      notes.push('月令为财官食伤（异党）被冲，敌方之力受损，日主相对受益');
+    }
+  }
+
+  /* ---- A2. 得地（满分 30）：月支以外的比劫根 / 印根 ---- */
+  var sDi = 0, rootList = [], yinRootList = [];
+  if (mTongRank >= 0) rootList.push(pm.zhi + '（月令' + HIDE_RANK[mTongRank] + '比根）');
+  [py, pd, pt].forEach(function (p) {
+    var chong = beichong(p);
+    p.hides.forEach(function (hg, idx) {
+      var wxx = wxOf(hg), w = ROOT_W[idx] || 3.5;
+      if (chong) w *= 0.7;
+      if (isTong(wxx)) { sDi += w; rootList.push(p.zhi + '（' + HIDE_RANK[idx] + '比根' + (chong ? '被冲' : '') + '）'); }
+      else if (isYin(wxx)) { sDi += w * 0.6; yinRootList.push(p.zhi + '（' + HIDE_RANK[idx] + '印根' + (chong ? '被冲' : '') + '）'); }
+    });
+  });
+  sDi = Math.min(30, Math.round(sDi * 10) / 10);
+
+  /* ---- A3. 得势（满分 30）：年月时天干之比劫 / 印，虚浮打折 ---- */
+  var sShi = 0, ganHelp = 0, tongGanList = [];
+  [py, pm, pt].forEach(function (p) {
+    var wxx = wxOf(p.gan);
+    if (isTong(wxx) || isYin(wxx)) {
+      ganHelp++;
+      var rooted = ganHasRoot(p.gan);
+      sShi += isTong(wxx) ? (rooted ? 10 : 6) : (rooted ? 7 : 4);
+      tongGanList.push(p.gan + '·' + (isTong(wxx) ? '比劫' : '印星') + (rooted ? '（有根）' : '（虚浮）'));
+    }
+  });
+  sShi = Math.min(30, Math.round(sShi * 10) / 10);
+
+  var score1 = sLing + sDi + sShi;
+
+  /* ---- B. 同党 / 异党 加权能量 ---- */
+  var selfE = 1.0, otherE = 0;   /* 1.0 为日主本体底分 */
+  pillars.forEach(function (p) {
+    var pw = POS_W[p.key];
+    p.hides.forEach(function (hg, idx) {
+      var w = (HID_W[idx] || 0.4) * pw, wxx = wxOf(hg);
+      if (isTong(wxx)) selfE += w;
+      else if (isYin(wxx)) selfE += w * 0.65;
+      else otherE += w;
+    });
+    if (p.key !== 'd') {
+      var gw = 0.8 * (ganHasRoot(p.gan) ? 1 : 0.5), gwx = wxOf(p.gan);
+      if (isTong(gwx)) selfE += gw;
+      else if (isYin(gwx)) selfE += gw * 0.65;
+      else otherE += gw;
+    }
+  });
+
+  /* 月令异党被冲：异党能量打八五折，日主相对受益 */
+  if (chongFoe) { otherE *= 0.85; score1 += 3; }
+
+  /* ---- 修正：三合成局 / 半合（含旺支）化气 ---- */
+  ZHI_SANHE_GROUPS.forEach(function (g) {
+    var got = [];
+    g.z.forEach(function (z) { if (branches.indexOf(z) > -1) got.push(z); });
+    var hasWang = branches.indexOf(g.z[1]) > -1;
+    var friend = (g.wx === dayWx) ? '比' : (g.wx === yinWx ? '印' : '');
+    if (got.length >= 3) {
+      score1 += friend ? (friend === '比' ? 6 : 4) : -5;
+      if (friend) selfE += 1.6; else otherE += 1.6;
+      notes.push('地支' + g.name + '，' + g.wx + '之力大增（' + (friend ? '利' : '不利于') + '日主同党）');
+    } else if (got.length === 2 && hasWang) {
+      score1 += friend ? 2 : -2;
+      if (friend) selfE += 0.6; else otherE += 0.6;
+      notes.push('地支' + got.join('、') + '半合' + g.wx + '局，' + g.wx + '之力增强（' + (friend ? '利' : '不利于') + '日主）');
+    }
+  });
+  score1 = Math.max(0, Math.min(100, Math.round(score1 * 10) / 10));
+
+  var ratio = selfE / (selfE + otherE);
+  var final = Math.round((score1 * 0.5 + ratio * 100 * 0.5) * 10) / 10;
+
+  var strength;
+  if (final >= 66) strength = '身强';
+  else if (final >= 56) strength = '偏强';
+  else if (final > 44) strength = '中和';
+  else if (final > 34) strength = '偏弱';
+  else strength = '身弱';
+
+  if (final <= 22) notes.push('同党（印比）力量极弱，有从财/从杀/从势之象，实务论命可参从格取用');
+  if (final >= 80) notes.push('同党（印比）力量极旺，有专旺（从强）之象，实务论命可参专旺格取用');
+
+  return {
+    strength: strength, final: final,
+    sLing: sLing, sDi: sDi, sShi: sShi,
+    lingDesc: lingDesc,
+    selfE: Math.round(selfE * 100) / 100, otherE: Math.round(otherE * 100) / 100, ratio: ratio,
+    genCount: rootList.length, ganHelp: ganHelp,
+    rootList: rootList, yinRootList: yinRootList, tongGanList: tongGanList,
+    notes: notes
+  };
+}
+
 /* opts: {y,m,d,h,min,sex(1男0女),sect(1|2)} */
 function calcBazi(opts) {
   var solar = Solar.fromYmdHms(opts.y, opts.m, opts.d, opts.h, opts.min, 0);
@@ -227,38 +386,11 @@ function calcBazi(opts) {
     p.hides.forEach(function (hg, i) { addEnergy(GAN_DETAIL[hg].wx, i === 0 ? 1.4 : 0.35); });
   });
 
-  /* ---------- 旺衰：令 / 根 / 势 ---------- */
+  /* ---------- 旺衰：令 / 地 / 势 三要素 + 同党异党能量（算法见 strengthOf） ---------- */
   var dayWx = GAN_DETAIL[dayGan].wx;
-  var monthZhi = pm.zhi, monthMainWx = zhiMainWx(monthZhi);
-  var lingDesc, lingPoint;
-  if (monthMainWx === dayWx) { lingDesc = '得令（月令主气同我）'; lingPoint = 2; }
-  else if (WX_SHENG[monthMainWx] === dayWx) { lingDesc = '得令（月令生我，印旺）'; lingPoint = 2; }
-  else if (WX_SHENG[dayWx] === monthMainWx) { lingDesc = '失令（月令为我所泄，食伤旺）'; lingPoint = 0; }
-  else if (WX_KE[dayWx] === monthMainWx) { lingDesc = '失令（月令为我所克，财旺）'; lingPoint = 0; }
-  else { lingDesc = '失令（月令克我，官杀旺）'; lingPoint = 0; }
-
-  var genCount = 0, ganHelp = 0;
-  var rootList = [];
-  pillars.forEach(function (p) {
-    p.hides.forEach(function (hg, i) {
-      if (GAN_DETAIL[hg].wx === dayWx) { genCount++; if (i === 0) rootList.push(p.zhi + '（本气）'); }
-    });
-  });
-  [py, pm, pt].forEach(function (p) {
-    var rel = relOf(dayGan, p.gan);
-    if (rel === '同' || rel === '生我') ganHelp++;
-  });
-
-  var strength;
-  if (lingPoint === 2) {
-    if (genCount >= 3) strength = '身强';
-    else if (genCount >= 1) strength = '偏强';
-    else strength = (ganHelp >= 2) ? '偏强' : '中和';
-  } else {
-    if (genCount === 0) strength = (ganHelp <= 0) ? '身弱' : (ganHelp === 1 ? '偏弱' : '中和');
-    else if (genCount === 1) strength = (ganHelp >= 1) ? '中和' : '偏弱';
-    else strength = '中和';
-  }
+  var st = strengthOf(pillars, dayGan);
+  var strength = st.strength;
+  var lingDesc = st.lingDesc, genCount = st.genCount, ganHelp = st.ganHelp, rootList = st.rootList;
 
   /* ---------- 喜用 / 忌神（扶抑取法，供参考） ---------- */
   function findWhoSheng(wx) { for (var i = 0; i < WX_ORDER.length; i++) if (WX_SHENG[WX_ORDER[i]] === wx) return WX_ORDER[i]; return ''; }
@@ -307,6 +439,7 @@ function calcBazi(opts) {
     pillars: pillars,
     energy: energy,
     strength: strength,
+    st: st,
     lingDesc: lingDesc, genCount: genCount, ganHelp: ganHelp, rootList: rootList,
     xi: xi, ji: ji, lackNote: lackNote,
     sortedWx: sortedWx, most: most, least: least,
@@ -330,7 +463,7 @@ function buildSummary(r) {
   var yyy = r.lunar.getYearInChinese();
   parts.push('「' + r.dayGan + '」' + dm.yy + dm.wx + '（' + dm.image + '）是您的日主，代表您本人。生于' + yyy + '年属' + ZHI_DETAIL[r.pillars[0].zhi].shengxiao + '，日坐「' + dmZhi + '」' + zhiInfo.nature);
   parts.push('个性上，' + dm.nature + dm.like);
-  parts.push('格局强弱：' + r.strength + '。' + r.lingDesc + '，地支通根 ' + (r.rootList.length || 0) + ' 位' + (r.rootList.length ? '（' + r.rootList.join('、') + '）' : '') + '，透干比肩印绶 ' + r.ganHelp + ' 个。');
+  parts.push('格局强弱：' + r.strength + '（旺衰评分 ' + r.st.final + '，得令 ' + r.st.sLing + '/40、得地 ' + r.st.sDi + '/30、得势 ' + r.st.sShi + '/30，印比同党约占 ' + Math.round(r.st.ratio * 100) + '%）。' + r.lingDesc + '，地支通根 ' + (r.rootList.length || 0) + ' 位' + (r.rootList.length ? '（' + r.rootList.join('、') + '）' : '') + '，透干比印 ' + r.ganHelp + ' 个。' + (r.st.notes.length ? r.st.notes.join('；') + '。' : ''));
 
   var ssTop = [];
   r.pillars.forEach(function (p) {
@@ -697,12 +830,12 @@ function buildDimAnalysis(r) {
  * ============================================================ */
 var CASE_LIB = [
   {
-    key: 'A', label: '案例一 · 坤造（女）', byText: '日主「辛」金珠玉 · 生于申月得令，身强 · 伤官生财一路流通',
+    key: 'A', label: '案例一 · 坤造（女）', byText: '日主「辛」金珠玉 · 生于申月得令而水木泄秀，得令不等于身强，中和之局 · 伤官生财一路流通',
     opt: { y: 1995, m: 8, d: 8, h: 8, min: 30, sex: 0, sect: 2 },
     dims: '职业/学业：辛金喜水淘洗，时上壬水伤官透出，才华灵动，宜技术、文创、表达类职业，靠本事吃饭最稳。财运：伤官生财、月透甲木正财，求财靠"手艺+口碑"，收入随专业深耕水涨船高。感情婚姻：女命伤官透时，爱憎分明、敢爱敢恨，欣赏强者也常挑剔强者——正缘宜找能接住你锋芒、给你自由的伴侣。健康：金旺须护肺与皮肤，秋冬季注意呼吸道。六亲：日坐未土印库，母缘深、中年得长辈与不动产之助。'
   },
   {
-    key: 'B', label: '案例二 · 乾造（男）', byText: '日主「戊」土城墙 · 生于子月失令，双丙偏印护身 · 财旺有印，后劲厚',
+    key: 'B', label: '案例二 · 乾造（男）', byText: '日主「戊」土城墙 · 生于子月失令，双丙偏印护身 · 财旺有印，中和偏强，后劲厚',
     opt: { y: 2000, m: 1, d: 1, h: 8, min: 30, sex: 1, sect: 2 },
     dims: '职业/学业：戊土厚重、双丙印星相护，读书有师长提携，宜土木工程、地产、管理、教育等"根基型"行业。财运：月令子水正财当令，财路规矩扎实、工资进账稳；中年后遇火土大运，置业置产之象明显。感情婚姻：男命正财透而贴近日主，对感情专一有担当，配偶旺夫持家；惟需防兄弟朋友"借光"伤财。健康：土旺湿气重，注意脾胃运化，多运动排汗。六亲：印星重重，与母缘极深，长辈是你最强的后盾。'
   }
@@ -796,8 +929,15 @@ function renderReport(r) {
   h += '<p><b>格局：</b>' + ge.ge + (r.shen.kui ? '（日柱魁罡，刚毅果断）' : '') + '。' + (ge.note.length ? ge.note.join('；') + '。' : '') + '</p>';
   var dm = GAN_DETAIL[r.dayGan];
   h += '<p><b>日主：</b>「' + r.dayGan + '」' + dm.yy + dm.wx + '（' + dm.image + '），' + dm.nature + '</p>';
-  h += '<p><b>强弱：</b>' + r.strength + '。' + r.lingDesc + '；地支同类藏干 ' + (r.genCount || 0) + ' 处' +
-    (r.rootList.length ? '（' + r.rootList.join('、') + '）' : '') + '为根，年月时干现比印 ' + r.ganHelp + ' 个为助。' +
+  h += '<p><b>强弱：</b>' + r.strength + '（旺衰综合评分 ' + r.st.final + ' / 100）。' +
+    '<b>得令 ' + r.st.sLing + '/40</b>：' + r.lingDesc + '；' +
+    '<b>得地 ' + r.st.sDi + '/30</b>：地支比劫之根 ' + (r.genCount || 0) + ' 处' +
+    (r.rootList.length ? '（' + r.rootList.join('、') + '）' : '') +
+    (r.st.yinRootList.length ? '，印根：' + r.st.yinRootList.join('、') : '') + '；' +
+    '<b>得势 ' + r.st.sShi + '/30</b>：年月时干比印 ' + r.ganHelp + ' 个' +
+    (r.st.tongGanList.length ? '（' + r.st.tongGanList.join('、') + '）' : '') + '。' +
+    '印比同党能量 ' + r.st.selfE + ' : 异党（财官食伤）' + r.st.otherE + '，同党占比约 ' + Math.round(r.st.ratio * 100) + '%。' +
+    (r.st.notes.length ? '<br>特别提示：' + r.st.notes.join('；') + '。' : '') +
     (r.strength === '身强' || r.strength === '偏强' ? '气盛宜"克泄耗"，喜用参考「' + r.xi.join('、') + '」' + lifeTip(r.xi[0]) + '，忌「' + r.ji.join('、') + '」再帮。' :
       r.strength === '身弱' || r.strength === '偏弱' ? '偏弱宜"印比生扶"，喜用参考「' + r.xi.join('、') + '」' + lifeTip(r.xi[0]) + '，忌「' + r.ji.join('、') + '」多泄克耗。' : '中和之局贵在流通，不必强分喜忌。') + '</p>';
   h += '</div>';

@@ -101,6 +101,15 @@
     border:1px solid #b99a5c; border-radius:6px; background:#fffdf6; outline:none;
   }
   .lunar-y{ width:92px; } .lunar-m{ width:86px; } .lunar-d{ width:88px; }
+  /* 公历年月日三段下拉（快捷输入） */
+  .ymd-inline{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+  .ymd-inline select{
+    font-family:inherit; font-size:15px; color:var(--ink); padding:7px 6px;
+    border:1px solid #b99a5c; border-radius:6px; background:#fffdf6; outline:none;
+  }
+  .ymd-inline select:focus{ border-color:var(--red); box-shadow:0 0 0 2px rgba(163,51,39,.12); }
+  .ymd-y{ width:100px; } .ymd-m{ width:78px; } .ymd-d{ width:80px; }
+  .hp-card .ymd-inline select{ flex:1; width:auto; }
   .leap-box{ font-size:14px; color:#6b5638; display:inline-flex; align-items:center; gap:3px; cursor:pointer; }
   .leap-box input{ accent-color:var(--red); width:14px; height:14px; }
   .unknown-box{ font-size:13px; color:#7a6544; display:inline-flex; align-items:center; gap:5px; cursor:pointer;
@@ -315,7 +324,8 @@
       <div class="form-grid">
         <div class="fld">
           <label>公历出生日期</label>
-          <input type="date" id="in-date" value="2000-01-01" min="1900-01-01" max="2100-12-31">
+          <input type="hidden" id="in-date" value="2000-01-01">
+          <div class="ymd-inline" id="in-ymd"></div>
         </div>
         <div class="fld">
           <label>农历（与公历互转）</label>
@@ -348,7 +358,7 @@
           </div>
         </div>
       </div>
-      <div class="hint-sub">※ 公历、农历任填一侧即可自动互转（农历支持闰月）。时辰按出生地钟表时间填即可；「子正换日」指 23:00–24:00 夜子时仍归当日，「子初换日」指 23:00 即换次日，不确定请保持默认。</div>
+      <div class="hint-sub">※ 公历、农历任填一侧即可自动互转（农历支持闰月）。年月日下拉点选即可，年份支持直接键入数字快速定位（如按「1995」跳到 1995 年），天数随年月自动适配；时辰按出生地钟表时间填即可；「子正换日」指 23:00–24:00 夜子时仍归当日，「子初换日」指 23:00 即换次日，不确定请保持默认。</div>
       <div class="btn-row">
         <button class="btn btn-main" onclick="onCalc()">开 盘</button>
         <button class="btn btn-ghost" onclick="setToday()">填入今日</button>
@@ -367,7 +377,8 @@
         <div class="card-grid">
           <div>
             <div class="lbl">公历出生日期</div>
-            <input type="date" id="a-date" value="2000-01-01" min="1900-01-01" max="2100-12-31" style="width:100%">
+            <input type="hidden" id="a-date" value="2000-01-01">
+            <div class="ymd-inline" id="a-ymd"></div>
           </div>
           <div class="row-lunar">
             <div class="lbl">农历（与公历互转）</div>
@@ -403,7 +414,8 @@
         <div class="card-grid">
           <div>
             <div class="lbl">公历出生日期</div>
-            <input type="date" id="b-date" value="1998-08-08" min="1900-01-01" max="2100-12-31" style="width:100%">
+            <input type="hidden" id="b-date" value="1998-08-08">
+            <div class="ymd-inline" id="b-ymd"></div>
           </div>
           <div class="row-lunar">
             <div class="lbl">农历（与公历互转）</div>

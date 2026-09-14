@@ -126,6 +126,7 @@ function buildLunarControls(scope, hostId) {
       var solar = Lunar.fromYmd(y, mm, d).getSolar();
       var out = $(pid(scope, 'date'));
       out.value = solar.toYmd();
+      fireChange(out);   /* 通知公历三段下拉同步显示 */
     } catch (e) {
       alert('该农历日期超出历法支持范围（农历 1900–2100），已按原值保留。');
     }
@@ -138,21 +139,77 @@ function buildLunarControls(scope, hostId) {
   ld.addEventListener('change', syncSolarFromLunar);
   syncLunarFromSolar();
 }
+/* ---------- 公历年月日三段下拉（快捷输入） ----------
+ * 隐藏的 {scope}-date 仍是唯一数据源（readPicker / 农历联动均读它）：
+ *   三段下拉 change → 写回隐藏框并派发 change → 农历自动跟随；
+ *   setSolarAndSync / 填入今日等写隐藏框并派发 change → 三段下拉同步显示。
+ * 年份按年代分组、由近及远，select 聚焦后可直接键入数字跳转定位。 */
+function buildSolarControls(scope) {
+  var host = $(pid(scope, 'ymd'));
+  if (!host) return;
+  host.innerHTML =
+    '<select id="' + pid(scope, 'sy') + '" class="ymd-y"></select>' +
+    '<select id="' + pid(scope, 'sm') + '" class="ymd-m"></select>' +
+    '<select id="' + pid(scope, 'sd') + '" class="ymd-d"></select>';
+  var sy = $(pid(scope, 'sy')), sm = $(pid(scope, 'sm')), sd = $(pid(scope, 'sd'));
+  var nowY = new Date().getFullYear();
+
+  /* 年：由近及远 + 年代分组，方便一眼锁定出生年代 */
+  var html = '';
+  function grp(label, from, to) {
+    var s = '<optgroup label="' + label + '">';
+    for (var y = from; y >= to; y--) s += '<option value="' + y + '">' + y + '年</option>';
+    return s + '</optgroup>';
+  }
+  if (nowY >= 2010) html += grp('2010年后', nowY, 2010);
+  html += grp('2000年代', 2009, 2000) + grp('1990年代', 1999, 1990) +
+          grp('1980年代', 1989, 1980) + grp('1970年代', 1979, 1970) +
+          grp('1960年代', 1969, 1960) + grp('1950年代', 1959, 1950) +
+          grp('1940年代', 1949, 1940) + grp('1930年代', 1939, 1930) +
+          grp('1920年代', 1929, 1920) + grp('1910年代', 1919, 1910) +
+          grp('1900年代', 1909, 1900);
+  sy.innerHTML = html;
+  fillRange(sm, 1, 12, function (m) { return m + '月'; }, null);
+
+  function dayMax() { return new Date(+sy.value, +sm.value, 0).getDate(); }
+  function rebuildDays() {
+    var max = dayMax(), cur = +sd.value || 1;
+    fillRange(sd, 1, max, function (d) { return d + '日'; }, Math.min(cur, max));
+  }
+  rebuildDays();
+
+  function pad(x) { return (x < 10 ? '0' : '') + x; }
+  function apply() {
+    if (!sy.value || !sm.value || !sd.value) return;   /* 半选状态不写回 */
+    var out = $(pid(scope, 'date'));
+    out.value = sy.value + '-' + pad(+sm.value) + '-' + pad(+sd.value);
+    fireChange(out);   /* 通知农历联动跟随 */
+  }
+  function syncFromHidden() {
+    var v = $(pid(scope, 'date')).value;
+    if (!v) return;
+    var p = v.split('-');
+    sy.value = +p[0]; sm.value = +p[1];
+    rebuildDays();
+    sd.value = +p[2];
+  }
+  sy.addEventListener('change', function () { rebuildDays(); apply(); });
+  sm.addEventListener('change', function () { rebuildDays(); apply(); });
+  sd.addEventListener('change', apply);
+  $(pid(scope, 'date')).addEventListener('change', syncFromHidden);
+  syncFromHidden();
+}
+function fireChange(el) {
+  if (document.createEvent) {
+    var ev = document.createEvent('Event');
+    ev.initEvent('change', true, true);
+    el.dispatchEvent(ev);
+  }
+}
 function setSolarAndSync(scope, val) {
   $(pid(scope, 'date')).value = val;
-  if ($(pid(scope, 'ly'))) {
-    var sp = val.split('-');
-    var lu = Solar.fromYmdHms(+sp[0], +sp[1], +sp[2], 12, 0, 0).getLunar();
-    $(pid(scope, 'ly')).value = lu.getYear();
-    $(pid(scope, 'lm')).value = Math.abs(lu.getMonth());
-    $(pid(scope, 'll')).checked = lu.getMonth() < 0;
-    /* 触发同步重建天选项 */
-    if (document.createEvent) {
-      var ev = document.createEvent('Event');
-      ev.initEvent('change', true, true);
-      $(pid(scope, 'lm')).dispatchEvent(ev);
-    }
-  }
+  /* 统一由 date 的 change 事件驱动：公历三段下拉与农历联动都会自动跟随 */
+  fireChange($(pid(scope, 'date')));
 }
 
 /* ---------- 读取输入 ---------- */
@@ -284,12 +341,15 @@ function initApp() {
 
   /* 单盘 */
   initHM('', 8, 30);
+  buildSolarControls('');
   buildLunarControls('', 'in-lunar');
   $('in-unknown').addEventListener('change', function () { onUnknownTime('', this.checked); });
 
   /* 合盘 A / B */
   initHM('a', 8, 30);
   initHM('b', 12, 0);
+  buildSolarControls('a');
+  buildSolarControls('b');
   buildLunarControls('a', 'a-lunar');
   buildLunarControls('b', 'b-lunar');
   $('a-unknown').addEventListener('change', function () { onUnknownTime('a', this.checked); });
