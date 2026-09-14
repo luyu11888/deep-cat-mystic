@@ -149,6 +149,8 @@
   .card.bian .bian-flag{ display:inline-block; font-size:12px; color:#fff6e0; background:var(--gold); border-radius:3px; padding:1px 8px; letter-spacing:1px; vertical-align:middle; animation:flagPulse 2s ease infinite; }
   @keyframes flagPulse{ 0%,100%{box-shadow:0 0 0 0 rgba(201,162,75,.4);} 50%{box-shadow:0 0 0 7px rgba(201,162,75,0);} }
   .card.span2{ grid-column:1 / -1; }
+  .card.cuogua{ border-color:#6a8faa; }
+  .card.cuogua h3 .full{ color:#3a5a7a; }
   .card .flow{ margin-top:8px; font-size:13px; color:#7a6a4a; line-height:1.8; }
   .hex-diagram{ margin:8px 0 2px; line-height:1.45; }
   .hex-diagram .yao-line{ font-size:17px; letter-spacing:0; white-space:pre; display:flex; justify-content:space-between; max-width:250px; }
@@ -160,9 +162,9 @@
   .move-ring{ display:inline-block; width:11px; height:11px; border-radius:50%; background:var(--red); position:relative; vertical-align:middle; margin-right:4px; }
   .move-ring::after{ content:""; position:absolute; inset:-4px; border-radius:50%; border:1px solid var(--red); animation:ring .9s ease-out infinite; }
   @keyframes ring{ from{opacity:.9; transform:scale(.6);} to{opacity:0; transform:scale(1.6);} }
-  .overall{ margin-top:16px; background:linear-gradient(135deg,#fbf3df,#f3e6c4); border:1px solid var(--gold); border-radius:8px; padding:16px 18px; animation:cardUp .6s ease both; line-height:2; font-size:15.5px; }
+  .overall{ margin-top:16px; background:linear-gradient(135deg,#fbf3df,#f3e6c4); border:1px solid var(--gold); border-radius:8px; padding:16px 18px; animation:cardUp .6s ease both; line-height:2; font-size:15px; }
   .overall .lead{ color:var(--red); font-size:17px; letter-spacing:2px; }
-  .consult{ margin-top:16px; border:1px dashed var(--red); border-radius:8px; background:rgba(163,51,39,.05); padding:14px 16px; animation:cardUp .7s ease both; line-height:1.9; font-size:14.5px; }
+  .consult{ margin-top:16px; border:1px dashed var(--red); border-radius:8px; background:rgba(163,51,39,.04); padding:14px 16px; animation:cardUp .7s ease both; line-height:1.9; font-size:14px; }
   .consult b{ color:var(--red); }
   .wx-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:6px; }
   .wx-badge{ background:linear-gradient(180deg,#3fae5a,#2e8c46); color:#fff; font-family:inherit; border:none; border-radius:6px; padding:7px 18px; cursor:pointer; letter-spacing:2px; font-size:14px; box-shadow:0 3px 0 #1e6b33; }
@@ -240,33 +242,28 @@
   .header-under{ margin-top:6px; font-size:12.5px; letter-spacing:3px; color:#a08a5e; }
   @media (max-width:820px){ .duilian{ display:none; } .plaque{ padding:14px 18px 12px; } .plaque .shop-name{ font-size:24px; letter-spacing:6px; } }
 
-  /* ============ 名门解爻 ============ */
-  .masters{ margin-top:10px; border-top:1px dashed var(--gold); padding-top:8px; font-size:13.5px; line-height:1.85; }
-  .m-head{ color:var(--red); font-weight:bold; letter-spacing:2px; margin-bottom:5px; font-size:14px; }
-  .m-fu,.m-shao,.m-zhang,.m-huang,.m-li{ margin-top:5px; }
-  .m-fu b,.m-shao b,.m-zhang b,.m-huang b,.m-li b{ color:#8a6d3b; font-weight:bold; }
-  .m-zhang{ background:rgba(143,174,118,.10); border-radius:6px; padding:5px 10px; }
-  .m-zhang b{ color:#2f5a1d; }
-  .m-huang{ background:rgba(201,162,75,.12); border-radius:6px; padding:5px 10px; }
-  .m-huang b{ color:#8a6d3b; }
-  .m-li{ background:rgba(163,51,39,.06); border-radius:6px; padding:5px 10px; }
-  .m-li b{ color:var(--red); }
-  .m-bian{ margin-top:7px; background:rgba(201,162,75,.14); border-radius:6px; padding:6px 10px; color:#5b3a1a; }
-
-  /* ============ 五端细说 ============ */
-  .five{ margin-top:16px; animation:cardUp .6s ease both; }
-  .five-title{ font-size:17px; color:var(--red); letter-spacing:2px; margin-bottom:3px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
-  .five-title .five-sub{ font-size:12px; color:#7a6a4a; letter-spacing:1px; font-weight:normal; }
-  .five-note{ font-size:12.5px; color:#8a7a5a; margin:2px 0 10px; }
-  .five-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(235px,1fr)); gap:12px; }
-  .f-item{ background:rgba(255,255,255,.62); border:1px solid #dcc592; border-left:4px solid var(--gold); border-radius:7px; padding:12px 14px; }
-  .f-top{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-  .f-tag{ width:27px; height:27px; border-radius:50%; background:var(--red); color:#fff6e0; font-size:14px; font-weight:bold; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 0 rgba(0,0,0,.15); }
-  .f-name{ font-weight:bold; letter-spacing:2px; color:var(--ink); }
-  .f-txt{ font-size:13.5px; line-height:1.75; color:#4b3a20; }
-  .f-adv{ margin-top:7px; font-size:13px; line-height:1.7; color:#3a5c28; background:rgba(143,174,118,.14); border-radius:5px; padding:5px 9px; }
-  .f-adv b{ color:#2f5a1d; }
-  .f-extra{ margin-top:5px; font-size:12.5px; line-height:1.65; border-radius:5px; padding:5px 9px; }
+  /* ============ 卦象通解 ============ */
+  .analysis{ margin-top:14px; animation:cardUp .5s ease both; }
+  .a-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; }
+  .a-item{ background:rgba(255,255,255,.6); border:1px solid #dcc592; border-left:4px solid var(--gold); border-radius:7px; padding:12px 14px; }
+  .a-item.yunshi{ border-left-color:#c9a24b; }
+  .a-item.jiazhai{ border-left-color:#6f9454; }
+  .a-item.shenti{ border-left-color:#3a8a8a; }
+  .a-item.qinggan{ border-left-color:#b5478a; }
+  .a-top{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .a-tag{ width:28px; height:28px; border-radius:50%; color:#fff6e0; font-size:14px; font-weight:bold; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 0 rgba(0,0,0,.12); }
+  .a-tag.t-yunshi{ background:#c9a24b; }
+  .a-tag.t-jiazhai{ background:#6f9454; }
+  .a-tag.t-shenti{ background:#3a8a8a; }
+  .a-tag.t-qinggan{ background:#b5478a; }
+  .a-name{ font-weight:bold; letter-spacing:2px; color:var(--ink); font-size:15px; }
+  .a-body{ display:flex; flex-direction:column; gap:6px; }
+  .a-sub{ display:flex; gap:8px; align-items:baseline; padding:4px 0; border-bottom:1px dashed rgba(180,160,120,.25); }
+  .a-sub:last-child{ border-bottom:none; }
+  .a-sub-t{ flex-shrink:0; width:78px; font-size:12px; font-weight:bold; color:#8a6d3b; letter-spacing:1px; }
+  .a-sub-v{ font-size:13.5px; line-height:1.75; color:#3b2a18; }
+  .a-adv{ margin-top:7px; font-size:13px; line-height:1.7; color:#3a5c28; background:rgba(143,174,118,.12); border-radius:5px; padding:5px 9px; }
+  .a-adv b{ color:#2f5a1d; }
 
   footer{ margin-top:18px; text-align:center; font-size:13px; color:#7a6a4a; line-height:1.8; }
 
@@ -458,6 +455,7 @@
     return { upper: upper, lower: lower, rec: rec };
   }
   function mutua(bits){ return [bits[1],bits[2],bits[3], bits[2],bits[3],bits[4]]; }
+  function cuogua(bits){ return bits.map(function(b){ return 1 - b; }); }
   function changed(bits, pos){ var nb = bits.slice(); nb[pos-1] = 1 - nb[pos-1]; return nb; }
   function parseNums(t){ var m = t.match(/\d+/g); return m ? m.map(Number) : []; }
 
@@ -622,31 +620,34 @@
   }
   function summ(u, l){ return HEX_SUMMARY["" + u + l] || ""; }
 
-  /* ---------- 五端细说（财运/家宅/事业/姻缘/康健） ---------- */
-  var FIVE_META = [
-    ["cai", "财", "财运"], ["zhai", "宅", "家宅"], ["shi", "业", "事业"],
-    ["qing", "情", "姻缘"], ["kang", "康", "康健"]
+  /* ---------- 卦象通解卡片 ---------- */
+  var A_META = [
+    ["yunshi", "运", "运势", "t-yunshi", ["财运","事业","学业","考试","官非","合作","投资","跳槽创业","项目回款","出行","流年","择日","贵人小人","决策选择"]],
+    ["qinggan", "情", "情感", "t-qinggan", ["恋爱","婚姻","正缘","复合","桃花","配偶情况","异地","第三者","婚期","相处建议","人际关系"]],
+    ["shenti", "身", "健康", "t-shenti", ["健康趋势","疾病康复","就医方向","手术","体检","养生","情绪睡眠","家人健康"]],
+    ["jiazhai", "宅", "家宅", "t-jiazhai", ["家庭和睦","六亲关系","父母子女配偶","房产买卖租赁","搬家装修","选址","家居风水","家运兴衰","失物寻人"]]
   ];
-  function fiveFieldHtml(key, huangNote, liNote){
-    var five = HEX_FIVE[key];
-    if (!five) return "";
-    var act = HEX_FIVE_ACT[key] || {};
-    var h = '<div class="five"><div class="five-title">✦ 五 端 细 说<span class="five-sub">财运 · 家宅 · 事业 · 姻缘 · 康健 —— 五端通览，各见深浅</span></div>' +
-      '<div class="five-note">同是一卦，落处不同，取舍各异。官人所问偏在哪一端，便细看哪一端。黄鉴先生以卦象对应脏腑康健，李洪成先生以博弈之眼审度各端实战对策——五家通参，方得圆照。</div><div class="five-grid">';
-    for (var i = 0; i < FIVE_META.length; i++) {
-      var k = FIVE_META[i][0], txt = five[k], adv = act[k];
-      if (!txt) continue;
-      var extraNote = "";
-      if (k === "kang" && huangNote) extraNote = '<div class="f-adv" style="background:rgba(201,162,75,.12);color:#5b3a1a;"><b style="color:#8a6d3b;">黄鉴 · 疾病预测：</b>' + huangNote + '</div>';
-      if (k === "shi" && liNote) extraNote = '<div class="f-adv" style="background:rgba(163,51,39,.06);color:#5b3a1a;"><b style="color:var(--red);">李洪成 · 实战策略：</b>' + liNote + '</div>';
-      h += '<div class="f-item"><div class="f-top"><span class="f-tag">' + FIVE_META[i][1] +
-        '</span><span class="f-name">' + FIVE_META[i][2] + "</span></div>" +
-        '<div class="f-txt">' + txt + "</div>" +
-        (adv ? '<div class="f-adv"><b>宜 ·</b> ' + adv + "</div>" : "") +
-        extraNote + "</div>";
+  function analysisHtml(MN, mv, dong, zhu, bian){
+    var h = '<div class="analysis"><div class="a-grid">';
+    for (var i = 0; i < A_META.length; i++) {
+      var key = A_META[i][0], label = A_META[i][1], name = A_META[i][2], tagCls = A_META[i][3], subs = A_META[i][4];
+      var group = MN[key];
+      if (!group) continue;
+      h += '<div class="a-item ' + key + '"><div class="a-top">' +
+        '<span class="a-tag ' + tagCls + '">' + label + '</span>' +
+        '<span class="a-name">' + name + '</span></div><div class="a-body">';
+      for (var j = 0; j < subs.length; j++) {
+        var sk = subs[j];
+        var sv = group[sk];
+        if (!sv) continue;
+        h += '<div class="a-sub"><span class="a-sub-t">' + sk + '</span><span class="a-sub-v">' + sv + '</span></div>';
+      }
+      h += '</div></div>';
     }
-    return h + "</div></div>";
+    h += '</div></div>';
+    return h;
   }
+
   /* 爻变示意（单爻）：动爻阴阳互变后的样子 */
   function yaoBar(afterYang){
     var line = afterYang ? "━━━━━━━" : "━━━    ━━━";
@@ -667,11 +668,14 @@
     var low = n2trig(a), up = n2trig(b), mv = n2yao(c);
     var bits = hexBits(up, low);
     var zhu = info(bits);
-    var dong = bits[mv-1] === 1;            // 动爻原为阳？
+    var dong = bits[mv-1] === 1;
     var bianBits = changed(bits, mv);
     var bian = info(bianBits);
     var huBits = mutua(bits);
     var hu = info(huBits);
+    var cuoBits = cuogua(bits);
+    var cuo = info(cuoBits);
+    var MN = MASTER_NOTE["" + up + low] || {};
 
     var basis =
       "<b>起卦依据</b>　" + note +
@@ -689,24 +693,13 @@
       '<div class="plain"><span class="lbl">白话卦义 · </span>' + summ(up, low) + "</div></div>";
 
     /* 动爻 */
-    var MN = MASTER_NOTE["" + up + low] || {};
-    var mastersNote =
-      '<div class="masters"><div class="m-head">名 门 解 爻 · 五 家 通 览</div>' +
-      '<div class="m-sub" style="font-size:12px;color:#8a7a5a;margin-bottom:6px;">参傅佩荣时位说卦 · 邵雍体用观变 · 张延生象数理占 · 黄鉴八卦相数疾病预测 · 李洪成SY策划实战搏杀</div>' +
-      (MN.fu ? '<div class="m-fu"><b>参傅佩荣 · 以时位说卦：</b>' + MN.fu + "</div>" : "") +
-      (MN.shao ? '<div class="m-shao"><b>参邵雍 · 以体用观变：</b>' + MN.shao + "</div>" : "") +
-      (MN.zhang ? '<div class="m-zhang"><b>参张延生 · 象数理占：</b>' + MN.zhang + "</div>" : "") +
-      (MN.huang ? '<div class="m-huang"><b>参黄鉴 · 八卦相数与疾病预测：</b>' + MN.huang + "</div>" : "") +
-      (MN.li ? '<div class="m-li"><b>参李洪成 · SY策划实战搏杀：</b>' + MN.li + "</div>" : "") +
-      '<div class="m-bian">☞ 所动第 ' + mv + " 爻（" + yaoti(mv, dong) + "）一发，本卦 " + zhu.rec.full +
-      " 即化入 " + bian.rec.full + "——此即邵氏所言「动爻为变化机关」：往后的走向，看变卦所喻。</div></div>";
     cards += '<div class="card dongyao"><h3><span class="full">' + yaoti(mv, dong) +
       '</span><span class="sub">动爻 · 发动处</span></h3>' +
       yaoBar(!dong) +
       '<div class="yao"><b>爻辞：</b>' + zhu.rec.lines[mv-1] + "</div>" +
       '<div class="flow">◆ 第' + mv + "爻发动，其位之义：<b>" + YAOWEI[mv] + "</b>。" +
       "此爻原为<b>" + (dong ? "阳" : "阴") + "</b>，一动而化为<b>" + (dong ? "阴" : "阳") +
-      "</b>，正是此卦“变”之机关。</div>" + mastersNote + "</div>";
+      "</b>，正是此卦变化之机关。</div></div>";
 
     /* 变卦 */
     cards += '<div class="card bian"><h3><span class="full">' + bian.rec.full +
@@ -725,26 +718,48 @@
       '<div class="plain"><span class="lbl">白话卦义 · </span>' + summ(hu.upper, hu.lower) +
       '<div class="flow" style="margin-top:6px;">互卦取本卦二至五爻，是局中暗藏的过程与助力——欲成此事，此中功夫不可少。</div></div></div>';
 
-    /* 白话总读 */
+    /* 错卦 */
+    cards += '<div class="card span2 cuogua"><h3><span class="full">' + cuo.rec.full +
+      '</span><span class="sub">错卦 · 阴阳全变之镜 · 上' + TRIGRAMS[cuo.upper].image + "下" + TRIGRAMS[cuo.lower].image + "</span></h3>" +
+      hexHtml(cuoBits, null, null) +
+      '<div class="judg"><span class="lbl">卦辞：</span>' + cuo.rec.judgment + "</div>" +
+      '<div class="plain"><span class="lbl">白话卦义 · </span>' + summ(cuo.upper, cuo.lower) +
+      '<div class="flow" style="margin-top:6px;">错卦取本卦六爻阴阳全变，是一面反面镜——照的是此局的另一面，正反对照方见全貌。</div></div></div>';
+
+    /* 总览 */
     var overall =
-      '<span class="lead">易者变也 · 白话总读 · 五家通参</span><br>' +
-      "① <b>现下之局</b>：" + zhu.rec.full + "。 " + summ(up, low) + "<br>" +
-      "② <b>内外气机</b>：" + fiveRel(up, low) + "<br>" +
+      '<span class="lead">易者变也 · 白话总读</span><br>' +
+      "① <b>现下之局</b>：此刻您正处在<b>" + zhu.rec.full + "</b>之中。" + summ(up, low) +
+      "<br>　　上" + TRIGRAMS[zhu.upper].image + "下" + TRIGRAMS[zhu.lower].image + "之象，" +
+      "<br>　　卦辞曰：「" + zhu.rec.judgment + "」<br><br>" +
+      "② <b>内外气机</b>：上" + TRIGRAMS[zhu.upper].image + "属" + TRIGRAMS_ELEMENT[zhu.upper] +
+      "，下" + TRIGRAMS[zhu.lower].image + "属" + TRIGRAMS_ELEMENT[zhu.lower] + "。" +
+      fiveRel(up, low) + "<br><br>" +
       "③ <b>变之所在</b>：所动在<b>第 " + mv + " 爻（" + yaoti(mv, dong) + "）</b>——" + YAOWEI[mv] +
-      "。此爻一发，全卦由" + zhu.rec.full + "转入" + bian.rec.full + "： " + summ(bian.upper, bian.lower) +
-      " 变，就是转机与提醒兼而有之——<b>变出之卦所指的方向，正是您往后该走的路</b>。<br>" +
-      "④ <b>象数之钥</b>：张延生先生以象数理占观之——上" + TRIGRAMS[up].name + TRIGRAMS_ELEMENT[up] + "、" + TRIGRAMS[up].image +
-      "，下" + TRIGRAMS[low].name + TRIGRAMS_ELEMENT[low] + "、" + TRIGRAMS[low].image + "，" +
-      "先天数上" + up + "下" + low + "，合而观之，则此卦之象与数，已将天机藏在其中。<br>" +
-      "⑤ <b>康健之鉴</b>：黄鉴先生以八卦相数读之——" + MN.huang + "<br>" +
-      "⑥ <b>实战之策</b>：李洪成先生以SY策划审之——" + MN.li + "<br>" +
-      "⑦ <b>一句心法</b>：卦是镜子，不是签筒。它照您当下的时位心念；五家通参，无非一面镜子照出五重光影。至于落子进退，仍在官人一念之间。";
+      "<br>　　此爻原为<b>" + (dong ? "阳" : "阴") + "</b>，一动而化为<b>" + (dong ? "阴" : "阳") + "</b>，" +
+      "正是全卦变化之机关所在。" +
+      "<br>　　爻辞曰：「" + zhu.rec.lines[mv-1] + "」" +
+      "<br>　　此爻一发，全卦由<b>" + zhu.rec.full + "</b>转入<b>" + bian.rec.full + "</b>：" + summ(bian.upper, bian.lower) +
+      "<br>　　<b>变出之卦，指向的正是您往后该走的方向。</b>" +
+      "<br>　　变，是转机，也是提醒——不可不看，也不可全信，以它为参照，行止之间方有定度。<br><br>" +
+      "④ <b>互卦之机</b>：取本卦二至五爻另成一卦——<b>" + hu.rec.full + "</b>，" + summ(hu.upper, hu.lower) +
+      "<br>　　互卦不在表面，它藏在卦的中间，是事物发展过程中<b>暗含的内因与酝酿之机</b>。" +
+      "本卦示现状，变卦示走向，互卦则示<b>由现状到走向之间，那段过渡路中不可绕开的功课</b>。" +
+      "<br>　　" + hu.rec.full + "的卦辞曰：「" + hu.rec.judgment + "」——" +
+      "此卦象所揭示的能量，正是行此事时暗中起作用的推力或阻力。" +
+      "<br>　　若互卦吉，则中间过程虽有波折，终有暗助托底；若互卦凶，则须格外留意途中的隐患，及早绸缪。" +
+      "<br>　　<b>欲成此事，不可只看起头与结尾，中间这一程——互卦所照——恰是成败的关键。</b><br><br>" +
+      "⑤ <b>错卦之变</b>：取本卦六爻阴阳全变，另成一卦——<b>" + cuo.rec.full + "</b>，" + summ(cuo.upper, cuo.lower) +
+      "<br>　　错卦不在卦象正面，它是本卦的<b>反面镜像</b>——每一爻皆阴阳互变，照出的是<b>同一件事翻过来看的另一面</b>。" +
+      "<br>　　" + cuo.rec.full + "的卦辞曰：「" + cuo.rec.judgment + "」——" +
+      "此卦象所揭示的，正是您所处之局的<b>对立面与盲区</b>。" +
+      "<br>　　本卦示现状，错卦示反面——若本卦吉，错卦提醒您吉中藏凶的一面；若本卦凶，错卦则暗示凶中亦藏转机。" +
+      "<br>　　正反对照，方见全貌。<b>不识错卦，只看正面，则如照镜只看一面——殊不知背面亦藏玄机。</b>";
 
     var consult =
       '<b>深情猫玄学馆 · 亲解</b><br>' +
-      "官人请过目——上列<b>名门解爻</b>集傅佩荣、邵雍、张延生、黄鉴、李洪成五位先贤之思路，" +
-      "以时位、体用、象数、相数疾病、策划实战五条路线通参一卦；" +
-      "<b>五端细说</b>则将此卦落于财运、家宅、事业、姻缘、康健各端，逐一展开吉凶深浅与行动对策。" +
+      "官人请过目——上方<b>本卦、变卦、互卦、错卦</b>四象并陈，卦辞爻辞一目了然；" +
+      "下方<b>卦象通解</b>分运势、家宅、身体、情感四大端逐一展开，各见深浅。" +
       "若想再问一句：何月见机、以何法化解、细处如何铺排，" +
       "可加铺子的微信（luyu11888），铺子坐堂细细为您分解——随缘打赏，惟愿您行得明白。" +
       '<div class="wx-qr-wrap"><img class="wx-qr" src="wechat-qrcode.png" alt="微信二维码 · luyu11888" title="扫码添加：luyu11888"></div>' +
@@ -755,7 +770,7 @@
       '<div class="basis">' + basis + "</div>" +
       '<div class="cards">' + cards + "</div>" +
       '<div class="overall">' + overall + "</div>" +
-      fiveFieldHtml("" + up + low, MN.huang || "", MN.li || "") +
+      analysisHtml(MN, mv, dong, zhu, bian) +
       '<div class="consult">' + consult + "</div>";
 
     var wx = $("btnWx");
@@ -773,8 +788,6 @@
       var _ask = ($("ask") ? ($("ask").value || "").trim() : "");
       var _strip = function (h) { var _d = document.createElement("div"); _d.innerHTML = h || ""; return _d.textContent || ""; };
       var _t = [];
-      var _f = HEX_FIVE["" + up + low] || {};
-      var _fm = [["cai", "财"], ["zhai", "宅"], ["shi", "业"], ["qing", "情"], ["kang", "康"]];
       _t.push("（周易起卦 · 数字起卦解卦）");
       _t.push(note);
       _t.push("所问：" + (_ask || "（未落文字 · 心中默念）"));
@@ -783,13 +796,11 @@
       _t.push("动爻：第" + mv + "爻（" + yaoti(mv, dong) + "）——" + _strip(YAOWEI[mv]) + "；爻辞：" + _strip(zhu.rec.lines[mv - 1]));
       _t.push("变卦「" + bian.rec.full + "」卦辞：" + _strip(bian.rec.judgment) + "；白话卦义：" + _strip(summ(bian.upper, bian.lower)));
       _t.push("互卦「" + hu.rec.full + "」卦辞：" + _strip(hu.rec.judgment) + "；白话卦义：" + _strip(summ(hu.upper, hu.lower)));
-      if (MN.zhang) _t.push("参张延生 · 象数理占：" + _strip(MN.zhang));
-      if (MN.huang) _t.push("参黄鉴 · 八卦相数疾病预测：" + _strip(MN.huang));
-      if (MN.li) _t.push("参李洪成 · SY策划实战搏杀：" + _strip(MN.li));
-      for (var _i = 0; _i < _fm.length; _i++) {
-        var _kv = _f[_fm[_i][0]];
-        if (_kv) _t.push("五端细说 · " + _fm[_i][1] + "：" + _strip(_kv));
-      }
+      _t.push("错卦「" + cuo.rec.full + "」卦辞：" + _strip(cuo.rec.judgment) + "；白话卦义：" + _strip(summ(cuo.upper, cuo.lower)));
+      if (MN.yunshi) { for (var _sk in MN.yunshi) { if (MN.yunshi[_sk]) _t.push("运势·" + _sk + "：" + _strip(MN.yunshi[_sk])); } }
+      if (MN.jiazhai) { for (var _sk2 in MN.jiazhai) { if (MN.jiazhai[_sk2]) _t.push("家宅·" + _sk2 + "：" + _strip(MN.jiazhai[_sk2])); } }
+      if (MN.shenti) { for (var _sk3 in MN.shenti) { if (MN.shenti[_sk3]) _t.push("身体·" + _sk3 + "：" + _strip(MN.shenti[_sk3])); } }
+      if (MN.qinggan) { for (var _sk4 in MN.qinggan) { if (MN.qinggan[_sk4]) _t.push("情感·" + _sk4 + "：" + _strip(MN.qinggan[_sk4])); } }
       var _now = (function () { var _d2 = new Date(); function _p(n) { return (n < 10 ? "0" : "") + n; } return _d2.getFullYear() + "-" + _p(_d2.getMonth() + 1) + "-" + _p(_d2.getDate()) + " " + _p(_d2.getHours()) + ":" + _p(_d2.getMinutes()); })();
       var _all = JSON.parse(localStorage.getItem("sqm_results_v1") || "{}");
       if (!_all || typeof _all !== "object") _all = {};
@@ -879,7 +890,13 @@
       '<div class="casting show"><div class="taiji"></div>' +
       '<div class="casting-word">寂 然 不 动 · 感 而 遂 通</div></div>';
     $("result").classList.add("show");
-    setTimeout(function(){ buildCast(nums); }, 980);
+    setTimeout(function(){
+      try { buildCast(nums); }
+      catch(err){
+        $("resultInner").innerHTML = '<div style="padding:20px;color:#a33327;"><b>起卦出错：</b><br>'+ err.message +'<br><br><pre>'+ (err.stack||'') +'</pre><br><br>请截图发给馆主（微信 luyu11888）排查。</div>';
+        $("result").classList.add("show");
+      }
+    }, 980);
   }
 
   function tryCast(nums){
