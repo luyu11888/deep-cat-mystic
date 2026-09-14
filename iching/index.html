@@ -243,8 +243,14 @@
   /* ============ 名门解爻 ============ */
   .masters{ margin-top:10px; border-top:1px dashed var(--gold); padding-top:8px; font-size:13.5px; line-height:1.85; }
   .m-head{ color:var(--red); font-weight:bold; letter-spacing:2px; margin-bottom:5px; font-size:14px; }
-  .m-fu,.m-shao{ margin-top:3px; }
-  .m-fu b,.m-shao b{ color:#8a6d3b; font-weight:bold; }
+  .m-fu,.m-shao,.m-zhang,.m-huang,.m-li{ margin-top:5px; }
+  .m-fu b,.m-shao b,.m-zhang b,.m-huang b,.m-li b{ color:#8a6d3b; font-weight:bold; }
+  .m-zhang{ background:rgba(143,174,118,.10); border-radius:6px; padding:5px 10px; }
+  .m-zhang b{ color:#2f5a1d; }
+  .m-huang{ background:rgba(201,162,75,.12); border-radius:6px; padding:5px 10px; }
+  .m-huang b{ color:#8a6d3b; }
+  .m-li{ background:rgba(163,51,39,.06); border-radius:6px; padding:5px 10px; }
+  .m-li b{ color:var(--red); }
   .m-bian{ margin-top:7px; background:rgba(201,162,75,.14); border-radius:6px; padding:6px 10px; color:#5b3a1a; }
 
   /* ============ 五端细说 ============ */
@@ -260,6 +266,7 @@
   .f-txt{ font-size:13.5px; line-height:1.75; color:#4b3a20; }
   .f-adv{ margin-top:7px; font-size:13px; line-height:1.7; color:#3a5c28; background:rgba(143,174,118,.14); border-radius:5px; padding:5px 9px; }
   .f-adv b{ color:#2f5a1d; }
+  .f-extra{ margin-top:5px; font-size:12.5px; line-height:1.65; border-radius:5px; padding:5px 9px; }
 
   footer{ margin-top:18px; text-align:center; font-size:13px; color:#7a6a4a; line-height:1.8; }
 
@@ -624,15 +631,19 @@
     var five = HEX_FIVE[key];
     if (!five) return "";
     var act = HEX_FIVE_ACT[key] || {};
-    var h = '<div class="five"><div class="five-title">✦ 五 端 细 说<span class="five-sub">此卦落于财运 · 家宅 · 事业 · 姻缘 · 康健 各端的吉凶深浅</span></div>' +
-      '<div class="five-note">同是一卦，落处不同，取舍各异。官人所问偏在哪一端，便细看哪一端。</div><div class="five-grid">';
+    var h = '<div class="five"><div class="five-title">✦ 五 端 细 说<span class="five-sub">财运 · 家宅 · 事业 · 姻缘 · 康健 —— 五端通览，各见深浅</span></div>' +
+      '<div class="five-note">同是一卦，落处不同，取舍各异。官人所问偏在哪一端，便细看哪一端。黄鉴先生以卦象对应脏腑康健，李洪成先生以博弈之眼审度各端实战对策——五家通参，方得圆照。</div><div class="five-grid">';
     for (var i = 0; i < FIVE_META.length; i++) {
       var k = FIVE_META[i][0], txt = five[k], adv = act[k];
       if (!txt) continue;
+      var extraNote = "";
+      if (k === "kang" && MN_huang) extraNote = '<div class="f-adv" style="background:rgba(201,162,75,.12);color:#5b3a1a;"><b style="color:#8a6d3b;">黄鉴 · 疾病预测：</b>' + MN_huang + '</div>';
+      if (k === "shi" && MN_li) extraNote = '<div class="f-adv" style="background:rgba(163,51,39,.06);color:#5b3a1a;"><b style="color:var(--red);">李洪成 · 实战策略：</b>' + MN_li + '</div>';
       h += '<div class="f-item"><div class="f-top"><span class="f-tag">' + FIVE_META[i][1] +
         '</span><span class="f-name">' + FIVE_META[i][2] + "</span></div>" +
         '<div class="f-txt">' + txt + "</div>" +
-        (adv ? '<div class="f-adv"><b>宜 ·</b> ' + adv + "</div>" : "") + "</div>";
+        (adv ? '<div class="f-adv"><b>宜 ·</b> ' + adv + "</div>" : "") +
+        extraNote + "</div>";
     }
     return h + "</div></div>";
   }
@@ -680,9 +691,13 @@
     /* 动爻 */
     var MN = MASTER_NOTE["" + up + low] || {};
     var mastersNote =
-      '<div class="masters"><div class="m-head">名 门 解 爻</div>' +
+      '<div class="masters"><div class="m-head">名 门 解 爻 · 五 家 通 览</div>' +
+      '<div class="m-sub" style="font-size:12px;color:#8a7a5a;margin-bottom:6px;">参傅佩荣时位说卦 · 邵雍体用观变 · 张延生象数理占 · 黄鉴八卦相数疾病预测 · 李洪成SY策划实战搏杀</div>' +
       (MN.fu ? '<div class="m-fu"><b>参傅佩荣 · 以时位说卦：</b>' + MN.fu + "</div>" : "") +
       (MN.shao ? '<div class="m-shao"><b>参邵雍 · 以体用观变：</b>' + MN.shao + "</div>" : "") +
+      (MN.zhang ? '<div class="m-zhang"><b>参张延生 · 象数理占：</b>' + MN.zhang + "</div>" : "") +
+      (MN.huang ? '<div class="m-huang"><b>参黄鉴 · 八卦相数与疾病预测：</b>' + MN.huang + "</div>" : "") +
+      (MN.li ? '<div class="m-li"><b>参李洪成 · SY策划实战搏杀：</b>' + MN.li + "</div>" : "") +
       '<div class="m-bian">☞ 所动第 ' + mv + " 爻（" + yaoti(mv, dong) + "）一发，本卦 " + zhu.rec.full +
       " 即化入 " + bian.rec.full + "——此即邵氏所言「动爻为变化机关」：往后的走向，看变卦所喻。</div></div>";
     cards += '<div class="card dongyao"><h3><span class="full">' + yaoti(mv, dong) +
@@ -712,23 +727,32 @@
 
     /* 白话总读 */
     var overall =
-      '<span class="lead">易者变也 · 白话总读</span><br>' +
+      '<span class="lead">易者变也 · 白话总读 · 五家通参</span><br>' +
       "① <b>现下之局</b>：" + zhu.rec.full + "。 " + summ(up, low) + "<br>" +
       "② <b>内外气机</b>：" + fiveRel(up, low) + "<br>" +
       "③ <b>变之所在</b>：所动在<b>第 " + mv + " 爻（" + yaoti(mv, dong) + "）</b>——" + YAOWEI[mv] +
       "。此爻一发，全卦由" + zhu.rec.full + "转入" + bian.rec.full + "： " + summ(bian.upper, bian.lower) +
       " 变，就是转机与提醒兼而有之——<b>变出之卦所指的方向，正是您往后该走的路</b>。<br>" +
-      "④ <b>一句心法</b>：卦是镜子，不是签筒。它照您当下的时位心念；至于落子进退，仍在官人一念之间。";
+      "④ <b>象数之钥</b>：张延生先生以象数理占观之——上" + TRIGRAMS[up].name + TRIGRAMS_ELEMENT[up] + "、" + TRIGRAMS[up].image +
+      "，下" + TRIGRAMS[low].name + TRIGRAMS_ELEMENT[low] + "、" + TRIGRAMS[low].image + "，" +
+      "先天数上" + up + "下" + low + "，合而观之，则此卦之象与数，已将天机藏在其中。<br>" +
+      "⑤ <b>康健之鉴</b>：黄鉴先生以八卦相数读之——" + MN.huang + "<br>" +
+      "⑥ <b>实战之策</b>：李洪成先生以SY策划审之——" + MN.li + "<br>" +
+      "⑦ <b>一句心法</b>：卦是镜子，不是签筒。它照您当下的时位心念；五家通参，无非一面镜子照出五重光影。至于落子进退，仍在官人一念之间。";
 
     var consult =
       '<b>深情猫玄学馆 · 亲解</b><br>' +
-      "官人请过目——上列<b>五端细说</b>是本卦落于<b>财运、家宅、事业、姻缘、康健</b>各端的浅浅一览；" +
+      "官人请过目——上列<b>名门解爻</b>集傅佩荣、邵雍、张延生、黄鉴、李洪成五位先贤之思路，" +
+      "以时位、体用、象数、相数疾病、策划实战五条路线通参一卦；" +
+      "<b>五端细说</b>则将此卦落于财运、家宅、事业、姻缘、康健各端，逐一展开吉凶深浅与行动对策。" +
       "若想再问一句：何月见机、以何法化解、细处如何铺排，" +
       "可加铺子的微信（luyu11888），铺子坐堂细细为您分解——随缘打赏，惟愿您行得明白。" +
       '<div class="wx-qr-wrap"><img class="wx-qr" src="wechat-qrcode.png" alt="微信二维码 · luyu11888" title="扫码添加：luyu11888"></div>' +
       '<div class="wx-row"><button class="wx-badge" id="btnWx">＋ 复制微信号：luyu11888</button><span id="wxTip" style="font-size:13px; color:#7a6a4a;"></span></div>' +
       '<div class="pay-row"><button class="btn-mini btn-lamp" id="btnTip">✦ 随 喜 添 灯 · 供 养 铺 子</button></div>';
 
+    var MN_huang = MN.huang || "";
+    var MN_li = MN.li || "";
     $("resultInner").innerHTML =
       '<div class="basis">' + basis + "</div>" +
       '<div class="cards">' + cards + "</div>" +
@@ -761,6 +785,9 @@
       _t.push("动爻：第" + mv + "爻（" + yaoti(mv, dong) + "）——" + _strip(YAOWEI[mv]) + "；爻辞：" + _strip(zhu.rec.lines[mv - 1]));
       _t.push("变卦「" + bian.rec.full + "」卦辞：" + _strip(bian.rec.judgment) + "；白话卦义：" + _strip(summ(bian.upper, bian.lower)));
       _t.push("互卦「" + hu.rec.full + "」卦辞：" + _strip(hu.rec.judgment) + "；白话卦义：" + _strip(summ(hu.upper, hu.lower)));
+      if (MN.zhang) _t.push("参张延生 · 象数理占：" + _strip(MN.zhang));
+      if (MN.huang) _t.push("参黄鉴 · 八卦相数疾病预测：" + _strip(MN.huang));
+      if (MN.li) _t.push("参李洪成 · SY策划实战搏杀：" + _strip(MN.li));
       for (var _i = 0; _i < _fm.length; _i++) {
         var _kv = _f[_fm[_i][0]];
         if (_kv) _t.push("五端细说 · " + _fm[_i][1] + "：" + _strip(_kv));
